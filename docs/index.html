@@ -6,7 +6,7 @@
         content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
   <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>OpenDlign: Enhancing Open-World 3D Learning with Depth-Aligned Images</title>
+  <title>Hypo3D: Exploring Hypothetical Reasoning in 3D</title>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
@@ -88,12 +88,16 @@
     <div class="container is-max-desktop">
       <div class="columns is-centered">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">OpenDlign: Enhancing Open-World 3D Learning with Depth-Aligned Images</h1>
+          <h1 class="title is-1 publication-title">Hypo3D: Exploring Hypothetical Reasoning in 3D</h1>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://yebulabula.github.io/">Ye Mao</a>,</span>
             <span class="author-block">
+              <a href="https://github.com/Roldbach">Nigel Luo</a>,</span>
+            <span class="author-block">
               <a href="https://tomtomtommi.github.io/">Junpeng Jing</a>,</span>
+              <span class="author-block">
+                <a href="https://github.com/Roldbach">Anlan Qiu</a>,</span>
             <span class="author-block">
               <a href="https://www.imperial.ac.uk/people/k.mikolajczyk">Krystian Mikolajczyk</a>
           </div>
@@ -116,7 +120,7 @@
               </span>
               <!-- Code Link. -->
               <span class="link-block">
-                <a href="https://github.com/Yebulabula/OpenDlign"
+                <a href="https://github.com/MatchLab-Imperial/Hypo3D"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="fab fa-github"></i>
@@ -126,7 +130,7 @@
               </span>
               <!-- Dataset Link. -->
               <span class="link-block">
-                <a href="https://huggingface.co/datasets/OpenDlign/OpenDlign-Datasets"
+                <a href="https://github.com/MatchLab-Imperial/Hypo3D"
                    class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
                       <i class="far fa-images"></i>
@@ -152,19 +156,22 @@
 </section>
 
 
+
+
+
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <!-- Center the title by adding a centered text class -->
+    <!-- <h2 class="title is-3 has-text-centered">Zero-Shot 3D Classifictaion</h2> -->
     <div class="hero-body">
-      <img id="teaser" src="./static/merge.png" alt="Teaser" style="width:100%; height:auto;">
+      <img id="teaser" src="./static/fig1.png" alt="Teaser" style="width:100%; height:auto;">
       <!-- Remove the centered text class from the subtitle for left-right text alignment -->
       <h2 class="content has-text-justified">
-        <strong>Top:</strong> Comparison of OpenDlign with traditional open-world 3D learning models. Depth-based (a) and point-based (b) methods employ additional depth or point encoders for pre-training to align with CAD-rendered images. Conversely, OpenDlign (c) fine-tunes only the image encoder, aligning with vividly colored and textured depth-aligned images for enhanced 3D representation. Both rendered and depth-aligned images are utilized solely during training. <strong>Bottom:</strong> Visual comparison between multi-view CAD-rendered and corresponding depth-aligned images in OpenDlign.
+        <strong>Overview of the Hypo3D benchmark.</strong> (1) Examples of five types of context changes. (2) Presents sample questions, including scale-based and direction-based questions requiring spatial reasoning, as well as semantic questions. (3) The radar chart shows a significant performance gap between models and humans, especially in directional questions.
       </h2>
     </div>
   </div>
 </section>
-
 
   <!--/ Abstract. -->
   <section class="section">
@@ -175,28 +182,22 @@
           <h2 class="title is-3">Abstract</h2>
           <div class="content has-text-justified">
             <p>
-              Recent open-world 3D representation learning methods using Vision-Language Models (VLMs) to align 3D data with image-text information have shown superior 3D zero-shot performance.
-            </p>
-            <p>
-              However, CAD-rendered images for this alignment often lack realism and texture variation, compromising alignment robustness. Moreover, the volume discrepancy between 3D and 2D pretraining datasets highlights the need for effective strategies to transfer the representational abilities of VLMs to 3D learning. In this paper, we present OpenDlign, a novel open-world 3D model using depth-aligned images generated from a diffusion model for robust multimodal alignment. These images exhibit greater texture diversity than CAD renderings due to the stochastic nature of the diffusion model. By refining the depth map projection pipeline and designing depth-specific prompts, OpenDlign leverages rich knowledge in pre-trained VLM for 3D representation learning.
-            </p>
-            <p>
-              Our experiments show that OpenDlign achieves high zero-shot and few-shot performance on diverse 3D tasks, despite only fine-tuning 6 million parameters on a limited ShapeNet dataset. In zero-shot classification, OpenDlign surpasses previous models by 8.0\% on ModelNet40 and 16.4\% on OmniObject3D. Additionally, using depth-aligned images for multimodal alignment consistently enhances the performance of other state-of-the-art models.
+              3D visual question answering (3D VQA), a key task for evaluating 3D reasoning, has advanced significantly with the rise of vision-language models and benchmark datasets. Existing 3D VQA benchmarks assume real-time scene accessibility during questioning, which is impractical due to the high cost of frequent scene updates. To this end, we introduce \textit{Hypothetical 3D Reasoning}, namely Hypo3D, a novel 3D VQA benchmark evaluating models' abilities to reason without access to the real-time scene. Models are required to hypothetically update the past scene based on the context change description before reasoning. The Hypo3D benchmark comprises 7,727 context changes across 700 indoor scenes, resulting in 14,885 question-answer pairs. An anchor-based world frame is established for all scenes, ensuring that directional terms in context changes and QAs are consistently referenced to a fixed coordinate system. Extensive experiments reveal that state-of-the-art foundation models struggle with reasoning in hypothetically changed scenes compared to humans, particularly in scenarios involving movement changes and directional reasoning. Even when the context change is irrelevant to the question, models often incorrectly adjust their answers. The benchmark will be publicly released.
             </p>
           </div>
         </div>
       </div>
+
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered">Overall Framework</h2>
+    <h2 class="title is-3 has-text-centered"> Example of hypothetical reasoning in a 3D scene.</h2>
     <div class="hero-body">
-
-      <img id="teaser" src="./static/Figure2.gif" alt="Chair Animation" style="width:100%; height:auto;">
+      <img id="teaser" src="./static/fig2.png" alt="Teaser" style="width:100%; height:auto;">
       <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <h2 class="content has-text-justified">
-        <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>,  OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction. For few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
-      </h2>
+      <!-- <h2 class="content has-text-justified">
+        <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>, OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction and for few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
+      </h2> -->
     </div>
   </div>
 </section>
@@ -207,7 +208,7 @@
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered">Zero-Shot 3D Classifictaion</h2>
+    <h2 class="title is-3 has-text-centered">Quantitative Results</h2>
     <div class="hero-body">
       <img id="teaser" src="./static/1.1.png" alt="Teaser" style="width:100%; height:auto;">
       <!-- Remove the centered text class from the subtitle for left-right text alignment -->
@@ -218,10 +219,11 @@
   </div>
 </section>
 
+
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered">Few-Shot 3D Classifictaion</h2>
+    <h2 class="title is-3 has-text-centered">Qualitative Visualizations</h2>
     <div class="hero-body">
       <img id="teaser" src="./static/1.2.png" alt="Teaser" style="width:100%; height:auto;">
       <!-- Remove the centered text class from the subtitle for left-right text alignment -->
@@ -231,36 +233,6 @@
     </div>
   </div>
 </section>
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered">Zero-Shot 3D Object Detection</h2>
-    <div class="hero-body">
-      <img id="teaser" src="./static/1.3.png" alt="Teaser" style="width:100%; height:auto;">
-      <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <!-- <h2 class="content has-text-justified">
-        <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>, OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction and for few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
-      </h2> -->
-    </div>
-  </div>
-</section>
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered">Cross-Modal Retrieval</h2>
-    <div class="hero-body">
-      <img id="teaser" src="./static/4.png" alt="Teaser" style="width:100%; height:auto;">
-      <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <h2 class="content has-text-justified">
-        <strong>3D shape retrieval results. </strong><strong>(a)</strong> Two most similar 3D shapes for each query image. <strong>(b)</strong> Most similar 3D shapes for each query text. <strong>(c)</strong> Two most similar 3D shapes for combined image and text queries.
-      </h2>
-    </div>
-  </div>
-</section>
-
 
 <!-- <section class="hero is-light is-small">
   <div class="hero-body">
@@ -334,10 +306,10 @@
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
     <pre><code>@article{mao2024opendlign,
-      title={OpenDlign: Enhancing Open-World 3D Learning with Depth-Aligned Images},
-      author={Mao, Ye and Jing, Junpeng and Mikolajczyk, Krystian},
+      title={Hypo3D: Exploring Hypothetical Reasoning in 3D},
+      author={Ye Mao, Nigel Luo, Junpeng Jing, Anlan Qiu, Krystian Mikolajczyk},
       journal={arXiv preprint arXiv:2404.16538},
-      year={2024}
+      year={2025}
     }</code></pre>
   </div>
 </section>
