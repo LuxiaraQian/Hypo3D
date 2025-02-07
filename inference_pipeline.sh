@@ -28,14 +28,14 @@ if [[ -f "$data_path" ]]; then
     echo "Inference on llava-ov 72B Model"
     python 2D-VLM/llava-ov/evaluate.py -f "$data_path" -m "llava-hf/llava-onevision-qwen2-72b-ov-hf"
 
-    echo "Inference on GPT4o-VL API Model"
-    python 2D-VLM/GPT4o/evaluate.py -f "$data_path"
+    # echo "Inference on GPT4o-VL API Model"
+    # python 2D-VLM/GPT4o/evaluate.py -f "$data_path"
 
-    echo "Inference on Claude-3.5-Sonnet API Model"
-    python 2D-VLM/Claude/evaluate.py -f "$data_path"
+    # echo "Inference on Claude-3.5-Sonnet API Model"
+    # python 2D-VLM/Claude/evaluate.py -f "$data_path"
 
-    echo "Inference on GPT4o-text API Model"
-    python LLM/GPT4o-text/evaluate.py -f "$data_path"
+    # echo "Inference on GPT4o-text API Model"
+    # python LLM/GPT4o-text/evaluate.py -f "$data_path"
 
     echo Inference on llama-3.2 3B Model
     python LLM/llama/evaluate.py -f "$data_path"

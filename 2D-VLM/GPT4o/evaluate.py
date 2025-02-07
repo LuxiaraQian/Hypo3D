@@ -89,25 +89,23 @@ def extract_non_nan_values(df):
 
     return extracted_values
 
-def collect_requests(filename, system_content, prompt, images_dir, camera_view_dir, split_ratio=5):
+def collect_requests(filename, system_content, prompt, images_dir,  split_ratio=5):
     """Collects requests by reading and processing files in the directory."""
     preprocess_data = load_data(filename)
     check_existing_requests()
-    axis_definition = pd.read_csv(f'{camera_view_dir}/axis_definition.csv')
+    df = pd.read_excel("dataset/Axis Definition.xlsx", sheet_name='Sheet1', engine='openpyxl')
     count = 0
     for scene_id, changes_list in preprocess_data.items():
         image_path = os.path.join(images_dir, f"{scene_id}.png")
         local_image = Image.open(image_path)
-        camera_view = Image.open(os.path.join(camera_view_dir, f"{scene_id}.png"))
         encoded_image = convert_image_to_base64(local_image)
-        encoded_camera_view = convert_image_to_base64(camera_view)
-        
-        scene_orientation = axis_definition[axis_definition['scene_id'] == scene_id]['orientation'].values[0]
-        # scene_orientation = " ".join(
-        #     f"The {item} was located at the {direction.lower()} of the scene."
-        #     for scene_id, directions in scene_orientation.items()
-        #     for direction, item in directions.items()
-        # )
+
+        scene_orientation = extract_non_nan_values(df[df['scene_id'] == scene_id])
+        scene_orientation = " ".join(
+            f"The {item} was located at the {direction.lower()} of the scene."
+            for scene_id, directions in scene_orientation.items()
+            for direction, item in directions.items()
+        )
         
         for changes in changes_list:
             context_change = changes['context_change']
@@ -136,12 +134,6 @@ def collect_requests(filename, system_content, prompt, images_dir, camera_view_d
                                     "type": "image_url",
                                     "image_url": {
                                         "url":  f"data:image/jpeg;base64,{encoded_image}"
-                                    },
-                                },
-                                {
-                                    "type": "image_url",
-                                    "image_url": {
-                                        "url":  f"data:image/jpeg;base64,{encoded_camera_view}"
                                     },
                                 }
                             ]},
@@ -211,17 +203,6 @@ def extract_data(total_number_of_files):
     batch = client.batches.list(limit=total_number_of_files).data
     
     data = {}
-    # file_ids = [(d.input_file_id, d.output_file_id) for d in batch if d.status != 'completed']
-    # with concurrent.futures.ThreadPoolExecutor() as executor:
-    #     input_file_contents = list(executor.map(fetch_file_content, [pair[0] for pair in file_ids]))
-        
-    # for input_content in input_file_contents:
-    #     if input_content:
-    #         ids = [json.loads(line).get("custom_id") for line in input_content.splitlines() if line]
-    #         print(ids)
-    # breakpoint()
-    
-    # print(f"Failed IDs: {faile_ids}")
     file_ids = [(d.input_file_id, d.output_file_id) for d in batch if d.status == 'completed']
 
     # Fetch files in parallel
@@ -329,7 +310,9 @@ if __name__ == '__main__':
     # '''
     
     prompt = '''
-    Given a top-view of a 3D scene and a reference frame image where the items were on the {} side of the room, first mentally align the top-view with the frame image.
+    Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
+
+    Scene Orientation: {}
 
     Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
 
@@ -342,8 +325,7 @@ if __name__ == '__main__':
     '''
     
     images_dir = "dataset/2D_VLM_data/top_view_with_label_rotated"
-    camera_view_dir = "dataset/2D_VLM_data/camera_view"
-    collect_requests(args.filename, system_content, prompt, images_dir, camera_view_dir, split_ratio=50)
+    collect_requests(args.filename, system_content, prompt, images_dir, split_ratio=50)
     
     all_requests = os.listdir('requests')
     for i, request in enumerate(all_requests):

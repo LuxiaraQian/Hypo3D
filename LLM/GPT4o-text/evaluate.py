@@ -24,7 +24,6 @@ def convert_image_to_base64(image):
 
 # Initialize OpenAI client
 client = OpenAI(api_key="Your Key")
-ROOT_DIR = "dataset/3D_VLM_data"
 
 def load_json(file_path):
     with open(file_path, 'r') as file:
@@ -43,10 +42,6 @@ def load_json(file_path):
     """Loads JSON data from a file."""
     with open(file_path, 'r') as file:
         return json.load(file)
-
-def read_instance_labels(scene_id):
-    """Reads instance labels for a given scene."""
-    return load_json(f'{ROOT_DIR}/{scene_id}/{scene_id}_id2labels.json')
 
 def encode_image(image_path):
     """Encodes an image to base64."""
@@ -90,7 +85,7 @@ def extract_non_nan_values(df):
 
     return extracted_values
 
-def collect_requests(filename, system_content, prompt, images_dir, split_ratio=5):
+def collect_requests(filename, system_content, prompt, split_ratio=5):
     """Collects requests by reading and processing files in the directory."""
     import pandas as pd
     preprocess_data = load_data(filename)
@@ -240,10 +235,7 @@ if __name__ == '__main__':
     import argparse
     from time import sleep
     import json
-    from nltk.translate.bleu_score import sentence_bleu
-    from rouge_score import rouge_scorer
     import re
-    from word2number import w2n
     import pandas as pd
     
     
@@ -275,10 +267,8 @@ if __name__ == '__main__':
 
     Answer:
     '''
-    
-    images_dir = "dataset/2D_VLM_data"
 
-    collect_requests(args.filename, system_content, prompt, images_dir, split_ratio=200)
+    collect_requests(args.filename, system_content, prompt, split_ratio=200)
   
     all_requests = os.listdir('requests')
 
@@ -298,162 +288,3 @@ if __name__ == '__main__':
         print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
     
     extract_data(len(all_requests), args.filename)
-    breakpoint()
-    # data = load_json('GPT_responses.json')
-
-    # Initialize variables to track the scores
-    exact_match_count = 0
-    partial_match_count = 0
-    bleu_scores = []
-    rouge_1_scores = []
-    rouge_l_scores = []
-    f1_scores = []
-
-    # Function to calculate exact match
-    def exact_match(gt, pred):
-        return int(gt.strip().lower() == pred.strip().lower())
-
-    def normalize_text(text):
-        # Convert to lowercase and remove punctuation except digits and letters
-        text = text.replace('To the', '').lower()
-        if text.startswith('zero') or text.startswith('one') or text.startswith('two') or text.startswith('three') or text.startswith('four') or text.startswith('five') or text.startswith('six') or text.startswith('seven') or text.startswith('eight') or text.startswith('nine'):
-            text = text.split(' ')[0]
-            
-        text = re.sub(r'[^a-zA-Z0-9\s]', '', text.lower())
-        
-        # Strip extra whitespace
-        text = text.strip()
-        
-        # Convert words to digits (e.g., "one" to "1")
-        text = convert_words_to_digits(text)
-        
-        # Remove articles (optional, depending on context)
-        text = re.sub(r'\b(a|an|the)\b', '', text)
-        
-        return text
-    
-    # Function to calculate partial match (Jaccard similarity)
-    def partial_match(gt, pred):
-        gt_set = set(gt.lower().split())
-        pred_set = set(pred.lower().split())
-        intersection = gt_set.intersection(pred_set)
-        union = gt_set.union(pred_set)
-        return len(intersection) / len(union) if len(union) > 0 else 0
-
-    def convert_words_to_digits(text):
-        words = text.split()
-        converted_words = []
-        for word in words:
-            try:
-                # Attempt to convert the word to a number
-                number = w2n.word_to_num(word)
-                converted_words.append(str(number))
-            except ValueError:
-                # If the word is not a number, keep it as is
-                converted_words.append(word)
-        return ' '.join(converted_words)
-
-    # Iterate through data and calculate metrics
-    from collections import defaultdict
-
-    # Initialize variables to track the overall scores
-    exact_match_count = 0
-    partial_match_count = 0
-    bleu_scores = []
-    rouge_1_scores = []
-    rouge_l_scores = []
-    f1_scores = []
-
-    # Initialize dictionaries to track scores for each question type
-    scores_by_type = defaultdict(lambda: {
-        'exact_match_count': 0,
-        'partial_match_count': 0,
-        'bleu_scores': [],
-        'rouge_1_scores': [],
-        'rouge_l_scores': [],
-        'f1_scores': [],
-        'count': 0
-    })
-
-
-    # Iterate through data and calculate metrics
-    for d in data:
-        # Preprocess ground truth and prediction
-        gt = normalize_text(d['answer'])
-        pred = normalize_text(d['prediction answer'])
-        question_type = d['question_type']
-
-        # Exact Match
-        em = exact_match(gt, pred)
-        exact_match_count += em
-        scores_by_type[question_type]['exact_match_count'] += em
-
-        # Partial Match (using Jaccard similarity)
-        pm = partial_match(gt, pred)
-        partial_match_count += pm
-        scores_by_type[question_type]['partial_match_count'] += pm
-
-        # BLEU Score
-        bleu = sentence_bleu([gt.split()], pred.split())
-        bleu_scores.append(bleu)
-        scores_by_type[question_type]['bleu_scores'].append(bleu)
-
-        # ROUGE Score
-        scorer = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
-        rouge_scores = scorer.score(gt, pred)
-        rouge_1_scores.append(rouge_scores['rouge1'].fmeasure)
-        rouge_l_scores.append(rouge_scores['rougeL'].fmeasure)
-        scores_by_type[question_type]['rouge_1_scores'].append(rouge_scores['rouge1'].fmeasure)
-        scores_by_type[question_type]['rouge_l_scores'].append(rouge_scores['rougeL'].fmeasure)
-
-        # F1 Score (token level)
-        gt_tokens = re.findall(r'\w+', gt)
-        pred_tokens = re.findall(r'\w+', pred)
-        common = set(gt_tokens) & set(pred_tokens)
-        precision = len(common) / len(pred_tokens) if len(pred_tokens) > 0 else 0
-        recall = len(common) / len(gt_tokens) if len(gt_tokens) > 0 else 0
-        f1 = 2 * (precision * recall) / (precision + recall) if (precision + recall) > 0 else 0
-        f1_scores.append(f1)
-        scores_by_type[question_type]['f1_scores'].append(f1)
-
-        # Update count for question type
-        scores_by_type[question_type]['count'] += 1
-
-    # Calculate overall averages
-    total = len(data)
-    exact_match_score = exact_match_count / total
-    partial_match_score = partial_match_count / total
-    average_bleu_score = sum(bleu_scores) / total
-    average_rouge_1 = sum(rouge_1_scores) / total
-    average_rouge_l = sum(rouge_l_scores) / total
-    average_f1_score = sum(f1_scores) / total
-
-    # Print overall results
-    print(f"Exact Match Score: {exact_match_score:.4f}")
-    print(f"Partial Match Score: {partial_match_score:.4f}")
-    print(f"Average BLEU Score: {average_bleu_score:.4f}")
-    print(f"Average ROUGE-1 Score: {average_rouge_1:.4f}")
-    print(f"Average ROUGE-L Score: {average_rouge_l:.4f}")
-    print(f"Average F1 Score: {average_f1_score:.4f}")
-
-    # Calculate and print average scores for each question type
-    for q_type, scores in scores_by_type.items():
-        count = scores['count']
-        if count > 0:
-            exact_match_avg = scores['exact_match_count'] / count
-            partial_match_avg = scores['partial_match_count'] / count
-            bleu_avg = sum(scores['bleu_scores']) / count
-            rouge_1_avg = sum(scores['rouge_1_scores']) / count
-            rouge_l_avg = sum(scores['rouge_l_scores']) / count
-            f1_avg = sum(scores['f1_scores']) / count
-
-            print(f"\nScores for Question Type '{q_type}':")
-            print(f"  Exact Match Score: {exact_match_avg:.4f}")
-            print(f"  Partial Match Score: {partial_match_avg:.4f}")
-            print(f"  Average BLEU Score: {bleu_avg:.4f}")
-            print(f"  Average ROUGE-1 Score: {rouge_1_avg:.4f}")
-            print(f"  Average ROUGE-L Score: {rouge_l_avg:.4f}")
-            print(f"  Average F1 Score: {f1_avg:.4f}")
-
-            
-            

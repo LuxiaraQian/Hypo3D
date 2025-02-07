@@ -2,7 +2,7 @@ import json
 import re
 from word2number import w2n
 from collections import defaultdict
-
+from sentence_transformers import SentenceTransformer, util
 
 def convert_words_to_digits(text):
     words = text.split()
@@ -94,6 +94,12 @@ def partial_match_score(predicted, reference):
     common_tokens = set(pred_tokens).intersection(set(ref_tokens))
     return len(common_tokens) / len(ref_tokens) if len(ref_tokens) > 0 else 0
 
+def calculate_sbert_score(predicted, reference):
+    embeddings1 = sbert_model.encode(predicted, convert_to_tensor=True)
+    embeddings2 = sbert_model.encode(reference, convert_to_tensor=True)
+    return float(util.pytorch_cos_sim(embeddings1, embeddings2)[0][0])
+
+
 def load_json(file_path):
     with open(file_path, "r") as file:
         data = json.load(file)
@@ -106,28 +112,39 @@ def compute_result_each_change(total_questions_per_type, exact_matches_per_type,
         overall_accuracy = (exact_matches_per_type[change_type] / total_questions_per_type[change_type]) * 100
         overall_partial_match_score = (sum(partial_match_scores_per_type[change_type]) / len(partial_match_scores_per_type[change_type])) * 100
         print(f"{change_type.split(' ')[1]:<20} {overall_accuracy:<10.2f}{overall_partial_match_score:<10.2f}")
+        
 
-def compute_result_each_question(total_questions_per_type, exact_matches_per_type, partial_match_scores_per_type):
+def compute_complete_result(total_questions_per_type, exact_matches_per_type, partial_match_scores_per_type):
+    print(f"{'Change Type':<20}{'EM (%)':<10}{'PM (%)':<10}")
+    print("-" * 40)
+    
+    question_types = ['Scale', 'Direction', 'Semantic']
+    for change_type in total_questions_per_type.keys():
+        for question_type in question_types:
+            overall_accuracy = (exact_matches_per_type[change_type][question_type] / total_questions_per_type[change_type][question_type]) * 100
+            overall_partial_match_score = (sum(partial_match_scores_per_type[change_type][question_type]) / len(partial_match_scores_per_type[change_type][question_type])) * 100
+            print(f"{change_type.split(' ')[1]:<20} {question_type:<20} {overall_accuracy:<10.2f}{overall_partial_match_score:<10.2f}")
+            
+def compute_result_each_question(total_questions_per_type, exact_matches_per_type, partial_match_scores_per_type, sbert_scores_per_type):
     question_types = ['Direction', 'Scale', 'Semantic']
-    print(f"{'Question Type':<20}{'EM (%)':<10}{'PM (%)':<10}")
+    print(f"{'Question Type':<20}{'EM (%)':<10}{'PM (%)':<10}{'SBERT (%)':<10}")
     print("-" * 40)
     for question_type in question_types:
         exact_match_score_per_type = (exact_matches_per_type[question_type] / total_questions_per_type[question_type]) * 100
         average_partial_match_per_type = sum(partial_match_scores_per_type[question_type]) / len(partial_match_scores_per_type[question_type]) * 100
-        print(f"{question_type:<20} {exact_match_score_per_type:<10.2f}{average_partial_match_per_type:<10.2f}")
+        average_sbert_score_per_type = sum(sbert_scores_per_type[question_type]) / len(sbert_scores_per_type[question_type])  * 100
+        print(f"{question_type:<20} {exact_match_score_per_type:<10.2f}{average_partial_match_per_type:<10.2f}{average_sbert_score_per_type:<10.2f}")
         
 if __name__ == "__main__":
+    sbert_model = SentenceTransformer('all-MiniLM-L6-v2')
     total_questions = 0
     exact_matches = 0
     partial_match_scores = []
     total_questions_per_type = {}
     exact_matches_per_type = {}
     partial_match_scores_per_type = {}
-    merged_total_matches_per_type = {}
-    merged_exact_matches_per_type = {}
-    merged_partial_match_scores_per_type = {}
 
-    data = load_json('exp/contextvqa_GPT4o_with_label_rotated.json')
+    data = load_json('exp/contextvqa_Claude-3.5-Sonnet_no_label_rotated.json')
 
     total_questions_per_type = defaultdict(int)
     exact_matches_per_type = defaultdict(int)
@@ -135,7 +152,11 @@ if __name__ == "__main__":
     question_exact_matches_per_type = defaultdict(int)
     question_partial_match_scores_per_type = defaultdict(list)
     question_total_questions_per_type = defaultdict(int)
-
+    question_sbert_scores_per_type = defaultdict(list)
+    
+    fine_exact_matches_per_type = defaultdict(lambda: defaultdict(int))
+    fine_partial_match_scores_per_type = defaultdict(lambda: defaultdict(list))
+    fine_total_questions_per_type = defaultdict(lambda: defaultdict(int))
     for scene_id, changes_list in data.items():
         for change in changes_list:
             context_change = change['context_change']
@@ -167,19 +188,24 @@ if __name__ == "__main__":
                         question_total_questions_per_type[question_type] = 0
                         question_exact_matches_per_type[question_type] = 0
                         question_partial_match_scores_per_type[question_type] = []
+                        question_sbert_scores_per_type[question_type] = []
                     
                     # Exact Match
                     if predicted_answer == reference_answer:
                         question_exact_matches_per_type[question_type] += 1
+                        fine_exact_matches_per_type[change_type][question_type] += 1
 
                     question_partial_match_scores_per_type[question_type].append(partial_match_score(predicted_answer, reference_answer))
+                    fine_partial_match_scores_per_type[change_type][question_type].append(partial_match_score(predicted_answer, reference_answer))
+                    fine_total_questions_per_type[change_type][question_type] += 1
+                    # question_sbert_scores_per_type[question_type].append(calculate_sbert_score(predicted_answer, reference_answer))
                     question_total_questions_per_type[question_type] += 1
                     
                 # Global metrics
                 if predicted_answer == reference_answer:
                     exact_matches += 1
                 total_questions += 1
-
+                
     exact_match_score = (exact_matches / total_questions) * 100
     average_partial_match_score = sum(partial_match_scores) / len(partial_match_scores) * 100
 
@@ -188,8 +214,8 @@ if __name__ == "__main__":
     print(f"Exact Match Score: {exact_match_score:.2f}%")
     print(f"Partial Match Score: {average_partial_match_score:.2f}%")
     
-    compute_result_each_change(total_questions_per_type, exact_matches_per_type, partial_match_scores_per_type)
-    
-    compute_result_each_question(question_total_questions_per_type, question_exact_matches_per_type, question_partial_match_scores_per_type)
+    compute_complete_result(fine_total_questions_per_type, fine_exact_matches_per_type, fine_partial_match_scores_per_type)
+    # compute_result_each_change(total_questions_per_type, exact_matches_per_type, partial_match_scores_per_type)
+    # compute_result_each_question(question_total_questions_per_type, question_exact_matches_per_type, question_partial_match_scores_per_type, question_sbert_scores_per_type)
     
 

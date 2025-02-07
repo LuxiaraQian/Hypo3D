@@ -252,7 +252,6 @@ def extract_data(total_number_of_files):
                     
     return data
 
-
 def process_jsonl(file_path):
     with open(file_path, 'r') as file:
         # Read all lines
@@ -298,8 +297,6 @@ def split_jsonl(file_path):
         part2.writelines(second_half)
 
     print(f"File has been split into {file_path}_part1.jsonl and {file_path}_part2.jsonl")
-
-    
     
 if __name__ == '__main__':
     import argparse
@@ -337,8 +334,6 @@ if __name__ == '__main__':
     '''
     
     images_dir = "dataset/2D_VLM_data/top_view_with_label_rotated" 
-
-    # collect_requests(args.filename, system_content, prompt, images_dir, split_ratio=50)
     
     
     ids = 0
@@ -355,8 +350,6 @@ if __name__ == '__main__':
         
         print(f"Processing batch {ids}")
         print(message_batch.processing_status)
-        # if message_batch.processing_status != 'ended':
-        #     continue
         
         for result in client.messages.batches.results(
             MESSAGE_BATCH_ID,
@@ -367,32 +360,32 @@ if __name__ == '__main__':
             # context_vqa_unmatched_CQ_without_context_change_GPT4o_with_label_rotated
     save_json(output, f"dataset/context_vqa_unmatched_CQ_without_context_change_Claude-3.5-Sonnet_with_label_rotated.json")
     
-    # all_requests = os.listdir('requests')[:100]   
+    all_requests = os.listdir('requests')[:100]   
     
-    # for i, request in enumerate(all_requests):
-    #     upload_tasks([request])
-    #     print(f"Generating question for scene {i}")
-    #     completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status((i+1) % 100)
-    #     print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
-    #     sleep(3)
+    for i, request in enumerate(all_requests):
+        upload_tasks([request])
+        print(f"Generating question for scene {i}")
+        completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status((i+1) % 100)
+        print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
+        sleep(3)
 
-    # completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status(len(all_requests))
-    # print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
-    # while completed_batches < len(all_requests):
-    #     print("Waiting for completion...")
-    #     sleep(3)
-    #     completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status(len(all_requests))
-    #     print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
+    completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status(len(all_requests))
+    print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
+    while completed_batches < len(all_requests):
+        print("Waiting for completion...")
+        sleep(3)
+        completed_batches, finialize_batches, in_progress_batches, validation_batches, failure_batches = show_status(len(all_requests))
+        print(f"Completed: {completed_batches}, Finalizing: {finialize_batches}, In Progress: {in_progress_batches}, Validation: {validation_batches}, Failure: {failure_batches}")
     
-    # output_data = extract_data(len(all_requests))
-    # original_data = load_json(args.filename)
-    # # print(output_data)
-    # for scene_id, changes_list in original_data.items():
-    #     for changes in changes_list:
-    #         question_answers = changes['questions_answers']
-    #         for qa in question_answers:
-    #             id = f"{scene_id}&{changes['context_change']}&{qa['question_type']}&{qa['question']}&{qa['answer']}"
-    #             if id in output_data:
-    #                 qa['predicted_answer'] = output_data[id]
+    output_data = extract_data(len(all_requests))
+    original_data = load_json(args.filename)
+    # print(output_data)
+    for scene_id, changes_list in original_data.items():
+        for changes in changes_list:
+            question_answers = changes['questions_answers']
+            for qa in question_answers:
+                id = f"{scene_id}&{changes['context_change']}&{qa['question_type']}&{qa['question']}&{qa['answer']}"
+                if id in output_data:
+                    qa['predicted_answer'] = output_data[id]
         
-    # save_json(original_data, f"dataset/39_97_{args.filename.split('/')[-1].split('.json')[0]}_GPT4o_no_label_rotated.json")
+    save_json(original_data, f"dataset/39_97_{args.filename.split('/')[-1].split('.json')[0]}_GPT4o_no_label_rotated.json")

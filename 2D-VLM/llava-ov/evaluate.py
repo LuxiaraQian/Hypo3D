@@ -138,23 +138,12 @@ def partial_match_score(predicted, reference):
     return len(common_tokens) / len(ref_tokens) if len(ref_tokens) > 0 else 0
 
 # Text prompt
-# template = '''
-# Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
-
-# Scene Orientation: {}
-
-# Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
-
-# Context Change: {}
-# Question: {}
-
-# The answer should be a single word or short phrase.
-
-# The answer is:
-# '''
-
 template = '''
-Given a top-view of a 3D scene and a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
+Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
+
+Scene Orientation: {}
+
+Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
 
 Context Change: {}
 Question: {}
@@ -215,7 +204,7 @@ for scene_id, changes_list in list(data.items()):
             question = qa['question']
             answer = qa['answer']
             
-            text_prompt = template.format(context_change, question)
+            text_prompt = template.format(scene_orientation, context_change, question)
             messages = [
                 {
                     "role": "user",
@@ -269,7 +258,7 @@ for scene_id, changes_list in list(data.items()):
 
             total_questions += 1
             total_questions_per_type[question_type] += 1
-    print('labelled result without axis')
+
     save_json(data, f"dataset/contextvqa_{args.model_id.split('/')[1]}_no_label_align.json")
     
 # Calculate average metrics for each question type

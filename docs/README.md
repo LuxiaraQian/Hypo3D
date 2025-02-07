@@ -1,16 +1,12 @@
-# Nerfies
+# Hypo3D: Exploring Hypothetical Reasoning in 3D.
 
-This is the repository that contains source code for the [Nerfies website](https://nerfies.github.io).
+**[Imperial College London](https://www.imperial.ac.uk/)**
 
-If you find Nerfies useful for your work please cite:
-```
-@article{park2021nerfies
-  author    = {Ye Mao, Junpeng Jing, Krystian Mikolajczyk},
-  title     = {https://github.com/Yebulabula},
-  journal   = {ECCV},
-  year      = {2021},
-}
-```
+[Ye Mao](https://yebulabula.github.io/), [Weixun Luo](https://scholar.google.com/citations?user=2Y0-0C8AAAAJ&hl=en), [Junpeng Jing](https://tomtomtommi.github.io/), Anlan Qiu, [Krystian Mikolajczyk](https://www.imperial.ac.uk/people/k.mikolajczyk)
 
-# Website License
-<a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png" /></a><br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+[[`Paper`](https://arxiv.org/abs/2404.16538)] [[`Project Website`](https://Yebulabula.github.io/OpenDlign/)]
+
+[***News***] [04/02/2025] The Hypo3D paper is released on Arxiv. 🔥🔥🔥
+
+Official implementation of [Hypo3D: Exploring Hypothetical Reasoning in 3D](https://arxiv.org/abs/2502.00954)
+
