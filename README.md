@@ -37,8 +37,22 @@ Hypo3D/
 ├── ...
 
 ```
-## Environment Setup
 
+### Step 2: Download the HourVideo Benchmark
+
+1. Download 3D scene representations in Hypo3D dataset
+   ```
+   git clone https://huggingface.co/datasets/MatchLab/Hypo3D
+   mv Hypo3D dataset # rename dataset folder
+   cd dataset
+   ```
+2. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
+
+3. Download 'embodiedscan_infos_full_updated.json' if you want to evaluate LLaVA-3D model.
+   ```
+   cd ../3D-VLM/LLaVA-3D
+   [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
+   ```
 
 ## Citation
 
