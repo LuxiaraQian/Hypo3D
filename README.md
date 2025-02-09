@@ -1,3 +1,20 @@
+<h1 align='center' style="text-align:center; font-weight:bold; font-size:2.0em;letter-spacing:2.0px;">
+                Hypo3D: Exploring Hypothetical Reasoning in 3D</h1>      
+<p align='center' style="text-align:center;font-size:1.25em;">
+    <a href="https://yebulabula.github.io/" target="_blank" style="text-decoration: none;">Ye Mao</a>,&nbsp;
+    <a href="https://scholar.google.com/citations?user=2Y0-0C8AAAAJ&hl=en" target="_blank" style="text-decoration: none;">Weixun Luo</a>,&nbsp;
+    <a href="https://tomtomtommi.github.io/" target="_blank" style="text-decoration: none;">Junpeng Jing</a>,&nbsp;
+    <a target="_blank" style="text-decoration: none;">Anlan Qiu</a>,&nbsp;
+    <a href="https://www.imperial.ac.uk/people/k.mikolajczyk"  target="_blank" style="text-decoration: none;">Krystian Mikolajczyk</a>,&nbsp;<br/>
+&nbsp;Stanford University<br/>
+<em>NeurIPS 2024 (D&B)</em><br/>
+<a href="https://hourvideo.stanford.edu" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Website</a> |
+<a href="https://huggingface.co/datasets/HourVideo/HourVideo" title="Dataset" target="_blank" rel="nofollow" style="text-decoration: none;">🤗 Dataset</a> |
+<a href="https://arxiv.org/abs/2411.04998" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📄 arXiv</a> |
+<a href="https://huggingface.co/datasets/HourVideo/HourVideo/tree/main/socratic_models_captions" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📖 Captions</a> |
+<a href="https://eval.ai/web/challenges/challenge-page/2433/overview" title="EvalAI" target="_blank" rel="nofollow" style="text-decoration: none;">🥇 EvalAI</a>
+</p>
+
 # Hypo3D: Exploring Hypothetical Reasoning in 3D.
 
 **[Imperial College London](https://www.imperial.ac.uk/)**
@@ -38,7 +55,7 @@ Hypo3D/
 
 ```
 
-### Step 2: Download the HourVideo Benchmark
+### Download the Hypo3D Benchmark
 
 1. Download 3D scene representations in Hypo3D dataset
    ```
@@ -52,6 +69,8 @@ Hypo3D/
    cd ../3D-VLM/LLaVA-3D
    ```
    [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
+
+
 
 ## Citation
 
