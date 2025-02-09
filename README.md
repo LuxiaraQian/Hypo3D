@@ -5,29 +5,11 @@
     <a href="https://scholar.google.com/citations?user=2Y0-0C8AAAAJ&hl=en" target="_blank" style="text-decoration: none;">Weixun Luo</a>,&nbsp;
     <a href="https://tomtomtommi.github.io/" target="_blank" style="text-decoration: none;">Junpeng Jing</a>,&nbsp;
     <a target="_blank" style="text-decoration: none;">Anlan Qiu</a>,&nbsp;
-    <a href="https://www.imperial.ac.uk/people/k.mikolajczyk"  target="_blank" style="text-decoration: none;">Krystian Mikolajczyk</a>,&nbsp;<br/>
-&nbsp;Stanford University<br/>
-<em>NeurIPS 2024 (D&B)</em><br/>
-<a href="https://hourvideo.stanford.edu" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Website</a> |
-<a href="https://huggingface.co/datasets/HourVideo/HourVideo" title="Dataset" target="_blank" rel="nofollow" style="text-decoration: none;">🤗 Dataset</a> |
-<a href="https://arxiv.org/abs/2411.04998" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📄 arXiv</a> |
-<a href="https://huggingface.co/datasets/HourVideo/HourVideo/tree/main/socratic_models_captions" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📖 Captions</a> |
-<a href="https://eval.ai/web/challenges/challenge-page/2433/overview" title="EvalAI" target="_blank" rel="nofollow" style="text-decoration: none;">🥇 EvalAI</a>
+    <a href="https://www.imperial.ac.uk/people/k.mikolajczyk"  target="_blank" style="text-decoration: none;">Krystian Mikolajczyk</a>&nbsp;<br/>
+&nbsp;Imperial College London<br/>
+<a href="https://matchlab-imperial.github.io/Hypo3D/" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Project Website</a> |
+<a href="https://arxiv.org/abs/2502.00954" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📄 arXiv</a> |
 </p>
-
-# Hypo3D: Exploring Hypothetical Reasoning in 3D.
-
-**[Imperial College London](https://www.imperial.ac.uk/)**
-
-[[`Paper`](https://arxiv.org/abs/2502.00954)] [[`Project Website`](https://matchlab-imperial.github.io/Hypo3D/)]
-
-[Ye Mao](https://yebulabula.github.io/), [Weixun Luo](https://scholar.google.com/citations?user=2Y0-0C8AAAAJ&hl=en), [Junpeng Jing](https://tomtomtommi.github.io/), Anlan Qiu, [Krystian Mikolajczyk](https://www.imperial.ac.uk/people/k.mikolajczyk)
-
-[***News***] [04/02/2025] The Hypo3D paper is released on Arxiv. 🔥🔥🔥
-
-Official implementation of [Hypo3D: Exploring Hypothetical Reasoning in 3D](https://arxiv.org/abs/2502.00954)
-
-![sicl](docs/static/fig1.png)
 
 ## Key Takeaways:
 > * Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
