@@ -13,9 +13,9 @@ Official implementation of [Hypo3D: Exploring Hypothetical Reasoning in 3D](http
 ![sicl](docs/static/fig1.png)
 
 ## Key Takeaways:
-> *Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
-> 
-> *The benchmark consists of 7,727 context changes and 14,885 question-answer pairs across 700 indoor scenes. These context changes span five categories: (1) Movement Change, involving geometric transformations like translation or rotation; (2) Removal Change, taking away objects; (3) Attribute Change, modifying object properties such as color and state; (4) Addition Change, introducing new objects; and (5) Replacement Change, substituting existing objects with new ones.
+> * Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
+
+> * The benchmark consists of 7,727 context changes and 14,885 question-answer pairs across 700 indoor scenes. These context changes span five categories: (1) Movement Change, involving geometric transformations like translation or rotation; (2) Removal Change, taking away objects; (3) Attribute Change, modifying object properties such as color and state; (4) Addition Change, introducing new objects; and (5) Replacement Change, substituting existing objects with new ones.
 
 ## About this code
 The Hypo3D codebase is written in Python and provides simple modules for benchmarking 10 Foundation models, including LLM, 2D VLMs, and 3D VLMs. The core module structure is as follows:
