@@ -16,7 +16,7 @@
 - **[2025-02-04]: Hypo3D paper preprint is available on arXiv**
 - **[2025-02-09]: Hypo3D benchmark released**
 - **[2024-02-09]: Evaluation scripts for various vision-language models are released**
-- 
+
 ## Key Takeaways:
 > * Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
 
