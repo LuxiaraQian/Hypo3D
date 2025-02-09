@@ -59,6 +59,12 @@ Hypo3D/
    [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
 
 
+## Contact
+- Ye Mao: ye.mao21@imperial.ac.uk
+- Weixun Luo: weixun.luo19@imperial.ac.uk
+- Junpeng Jing: weixun.luo19@imperial.ac.uk
+
+Please open an issue or submit a pull request for issues, or contributions.
 
 ## Citation
 
