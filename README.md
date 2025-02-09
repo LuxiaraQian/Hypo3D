@@ -48,11 +48,10 @@ Hypo3D/
    ```
 2. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
 
-3. Download 'embodiedscan_infos_full_updated.json' if you want to evaluate LLaVA-3D model.
-   ```
+3. ```
    cd ../3D-VLM/LLaVA-3D
-   [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
    ```
+   [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
 
 ## Citation
 
