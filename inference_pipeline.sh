@@ -1,5 +1,5 @@
 # Define the data path
-data_path="dataset/ContextQA/contextvqa.json"
+data_path="dataset/contextvqa.json"
 
 # Check if the file exists before running the script
 if [[ -f "$data_path" ]]; then
