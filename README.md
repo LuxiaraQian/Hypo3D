@@ -4,7 +4,7 @@
     <a href="https://yebulabula.github.io/" target="_blank" style="text-decoration: none;">Ye Mao</a>,&nbsp;
     <a href="https://scholar.google.com/citations?user=2Y0-0C8AAAAJ&hl=en" target="_blank" style="text-decoration: none;">Weixun Luo</a>,&nbsp;
     <a href="https://tomtomtommi.github.io/" target="_blank" style="text-decoration: none;">Junpeng Jing</a>,&nbsp;
-    <a target="_blank" style="text-decoration: none;">Anlan Qiu</a>,&nbsp;
+    <a href="https://anlanqiu.github.io/" target="_blank" style="text-decoration: none;">Anlan Qiu</a>,&nbsp;
     <a href="https://www.imperial.ac.uk/people/k.mikolajczyk"  target="_blank" style="text-decoration: none;">Krystian Mikolajczyk</a>&nbsp;<br/>
 &nbsp;Imperial College London<br/>
 <a href="https://matchlab-imperial.github.io/Hypo3D/" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Project Website</a> |
