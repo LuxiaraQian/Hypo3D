@@ -59,9 +59,9 @@ Hypo3D/
    Expected data folder format:
    ```
     dataset/
-    ├── LLM_data/                     # Scene Representations for Large Language Models (e.g., LLama3.2)
-    ├── 2D_VLM_data/                  # Scene Representations for 2D Vision-Language Models (e.g., GPT4o, Qwen2-VL, LLaVA-OV)
-    ├── 3D_VLM_data/                  # Scene Representations for 3D Vision-Language Models (e.g., LLaVA-3D)
+    ├── LLM_data/                     # Scene captions for Large Language Models (e.g., LLama3.2)
+    ├── 2D_VLM_data/                  # Scene Top-View Maps for 2D Vision-Language Models (e.g., GPT4o)
+    ├── 3D_VLM_data/                  # 3D Scene Data for 3D Vision-Language Models (e.g., LLaVA-3D)
   
     ```
 5. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
