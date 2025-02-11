@@ -56,9 +56,16 @@ Hypo3D/
    mv Hypo3D dataset # rename dataset folder
    cd dataset
    ```
-4. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
+   Expected data folder format:
+   ```
+  dataset/
+  ├── LLM_data/                     # Scene Representations for Large Language Models (e.g., LLama3.2)
+  ├── 2D_VLM_data/                  # Scene Representations for 2D Vision-Language Models (e.g., GPT4o, Qwen2-VL, LLaVA-OV)
+  ├── 3D_VLM_data/                  # Scene Representations for 3D Vision-Language Models (e.g., LLaVA-3D)
+  ```
+5. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
 
-5. ```
+6. ```
    cd ../3D-VLM/LLaVA-3D
    ```
    [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
