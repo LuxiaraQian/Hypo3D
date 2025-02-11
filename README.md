@@ -46,16 +46,19 @@ Hypo3D/
 ```
 
 ### Download the Hypo3D Benchmark
-
-1. Download 3D scene representations in Hypo3D dataset
+1. Clone the repository recursively.
+   ```
+   git clone --recursive https://github.com/MatchLab-Imperial/Hypo3D.git
+   ```
+3. Download 3D scene representations in Hypo3D dataset
    ```
    git clone https://huggingface.co/datasets/MatchLab/Hypo3D
    mv Hypo3D dataset # rename dataset folder
    cd dataset
    ```
-2. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
+4. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
 
-3. ```
+5. ```
    cd ../3D-VLM/LLaVA-3D
    ```
    [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
