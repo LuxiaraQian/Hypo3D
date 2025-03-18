@@ -66,12 +66,7 @@ Hypo3D/
     ├── 3D_VLM_data/                                       # 3D Scene Data for 3D Vision-Language Models (e.g., LLaVA-3D)
   
     ```
-5. [Download Hypo3D dataset in the dataset folder](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip)
-
-6. ```
-   cd ../3D-VLM/LLaVA-3D
-   ```
-   [Download embodiedscan_infos_full_updated.json file](https://drive.google.com/drive/folders/1ZD-xPBSrP-CldUeaEA3SIZh8BrpBecip) if you want to evaluate LLaVA-3D model.
+5. Complete the [form](https://forms.gle/w6NCaDjY9FzdSZFEA) to download Hypo3D dataset
 
 
 ## Contact
