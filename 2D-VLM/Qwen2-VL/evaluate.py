@@ -70,7 +70,7 @@ processor = AutoProcessor.from_pretrained(args.model_id, min_pixels=min_pixels, 
 
 # Load a local image
 data = json.load(open(args.data_path))
-images_dir = "dataset/2D_VLM_data/top_view_no_label"
+images_dir = "/gpfs/home/ym621/dataset/2D_VLM_data/top_view_no_label"
 
 def convert_words_to_digits(text):
     words = text.split()
@@ -86,22 +86,69 @@ def convert_words_to_digits(text):
     return ' '.join(converted_words)
     
 def normalize_text(text):
-    # Convert to lowercase and remove punctuation except digits and letters
-    text = text.replace('To the', '').lower()
-    if text.startswith('zero') or text.startswith('one') or text.startswith('two') or text.startswith('three') or text.startswith('four') or text.startswith('five') or text.startswith('six') or text.startswith('seven') or text.startswith('eight') or text.startswith('nine'):
-        text = text.split(' ')[0]
+    """
+    Normalize the input text by converting to lowercase, removing certain words/phrases,
+    replacing specific terms, removing punctuation, and converting words to digits.
+    """
+    # Convert to lowercase
+    text = text.lower()
+
+    # Define replacements for specific terms
+    replacements = {
+        'back and right': 'back right',
+        'back and left': 'back left',
+        'front and right': 'front right',
+        'front and left': 'front left',
+        'behind and to the right': 'back right',
+        'behind and to the left': 'back left',
+        'in front and to the right': 'front right',
+        'to the': '',
+        'by the': '',
+        'on the': '',
+        'near': '',
+        'next': '',
+        'corner': '',
+        'behind': 'back',
+        'bottom': 'back',
+        'top': 'front',
+        'right side': 'right',
+        'left side': 'left',
+        'front side': 'front',
+        'back side': 'back',
+        'in front of': 'front',
+        'on the left of': 'left',
+        'on the right of': 'right',
+        'on the left': 'left',
+        'on the right': 'right',
+        'north': 'front',
+        'south': 'back',
+        'east': 'right',
+        'west': 'left',
+        'northwest': 'front left',
+        'northeast': 'front right',
+        'southwest': 'back left',
+        'southeast': 'back right',
+        'forward': 'front',
+        'backward': 'back',
+        'bottom of': 'back',
+        "left of": 'left',
+        "right of": 'right',
+        "front of": 'front',
+        "back of": 'back'
+    }
         
-    text = re.sub(r'[^a-zA-Z0-9\s]', '', text.lower())
-    
-    # Strip extra whitespace
-    text = text.strip()
-    
-    # Convert words to digits (e.g., "one" to "1")
+    # Use regex for efficient replacements
+    sorted_replacements = sorted(replacements.keys(), key=len, reverse=True)
+    pattern = re.compile(r'\b(' + '|'.join(map(re.escape, sorted_replacements)) + r')\b')
+    text = pattern.sub(lambda match: replacements[match.group(0)], text)
+    # Remove articles (e.g., "a", "an", "the")
+    text = re.sub(r'\b(?:a|an|the)\b', '', text).strip()
+
+    # Remove punctuation except letters, digits, and spaces
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
+
+    # Convert number words to digits (if applicable)
     text = convert_words_to_digits(text)
-    
-    # Remove articles (optional, depending on context)
-    text = re.sub(r'\b(a|an|the)\b', '', text)
-    
     return text
     
 def f1_score(predicted, reference):
@@ -171,7 +218,7 @@ partial_match_scores_per_type = {}
 
 
 # read xlxs file
-df = pd.read_excel("dataset/Axis Definition.xlsx", sheet_name='Sheet1', engine='openpyxl')
+df = pd.read_excel("Axis Definition.xlsx", sheet_name='Sheet1', engine='openpyxl')
 
 # Main loop
 for scene_id, changes_list in list(data.items()):
