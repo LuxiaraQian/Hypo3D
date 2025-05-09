@@ -95,8 +95,6 @@ Hypo3D/
 
 ## Contact
 - Ye Mao: ye.mao21@imperial.ac.uk
-- Weixun Luo: weixun.luo19@imperial.ac.uk
-- Junpeng Jing: j.jing23@imperial.ac.uk
 
 Please open an issue or submit a pull request for issues, or contributions.
 
