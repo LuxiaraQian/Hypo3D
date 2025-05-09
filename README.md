@@ -98,6 +98,12 @@ Hypo3D/
 
 Please open an issue or submit a pull request for issues, or contributions.
 
+## 💼 License
+
+<a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" />
+</a>
+
 ## Citation
 
 If you find our benchmark is helpful, please cite our paper:
@@ -109,3 +115,5 @@ If you find our benchmark is helpful, please cite our paper:
   journal={arXiv preprint arXiv:2502.00954},
   year={2025}
 }
+```
+
