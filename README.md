@@ -9,6 +9,7 @@
 &nbsp;Imperial College London<br/>
 <a href="https://matchlab-imperial.github.io/Hypo3D/" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Project Website</a> |
 <a href="https://arxiv.org/abs/2502.00954" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📄 arXiv</a> 
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSe--CkKIw_aXZpHHIv3OEt2psPsMdqKNkl1NRQN3vd92wHjvA/viewform" title="Data" target="_blank" rel="nofollow" style="text-decoration: none;">💾 Data</a>
 </p>
 
 ## 📣 Latest Updates
@@ -19,7 +20,7 @@
 - **[2025-02-09]** 🧪 *Evaluation scripts for multiple vision-language models are now publicly available.*
 
 ## Key Takeaways:
-> * Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
+> * Hypo3D is a novel 3D reasoning dataset. Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
 
 > * The benchmark consists of 7,727 context changes and 14,885 question-answer pairs across 700 indoor scenes. These context changes span five categories: (1) Movement Change, involving geometric transformations like translation or rotation; (2) Removal Change, taking away objects; (3) Attribute Change, modifying object properties such as color and state; (4) Addition Change, introducing new objects; and (5) Replacement Change, substituting existing objects with new ones.
 
