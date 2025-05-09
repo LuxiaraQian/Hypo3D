@@ -79,7 +79,7 @@ Hypo3D/
 | **2D VLM (Non-Semantic Map)**  | Qwen2-VL 7B            | 29.68  | 34.47  |
 |                                | Qwen2-VL 72B           | 33.39  | 37.51  |
 |                                | LLaVA-OV 7B            | 30.62  | 34.34  |
-|                                | LLaVA-OV 72B           | 36.38  | **40.13**  |
+|                                | LLaVA-OV 72B           | **36.38**  | **40.13**  |
 |                                | Claude 3.5 Sonnet API  | 20.70  | 30.12  |
 |                                | GPT-4o API             | 33.58  | 36.75  |
 | **2D VLM (Semantic Map)**      | Qwen2-VL 7B            | 34.40  | 38.91  |
@@ -88,7 +88,7 @@ Hypo3D/
 |                                | LLaVA-OV 72B           | 43.81  | 46.83  |
 |                                | Claude 3.5 Sonnet API  | 41.36  | 51.59  |
 |                                | GPT-4o API             | **45.50**  | **48.82**  |
-| **3D VLM (RGB-D Video)**       | LEO 7B                 | 14.83  | 22.40  |
+| **3D VLM (RGB-D Video/Point Cloud)**       | LEO 7B                 | 14.83  | 22.40  |
 |                                | LLaVA-3D 7B            | **31.56**  | **35.23**  |
 | **Human**                      |                        | 91.00  | 92.50  |
 
