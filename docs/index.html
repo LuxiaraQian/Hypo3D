@@ -6,6 +6,7 @@
         content="Deformable Neural Radiance Fields creates free-viewpoint portraits (nerfies) from casually captured videos.">
   <meta name="keywords" content="Nerfies, D-NeRF, NeRF">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="./static/hypo_icon.png" type="image/png">
   <title>Hypo3D: Exploring Hypothetical Reasoning in 3D</title>
 
 
@@ -43,53 +44,31 @@
 </head>
 <body>
 
-<!-- <nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="https://keunhong.com">
-      <span class="icon">
-          <i class="fas fa-home"></i>
-      </span>
-      </a>
-
-      <div class="navbar-item has-dropdown is-hoverable">
-        <a class="navbar-link">
-          More Research
-        </a>
-        <div class="navbar-dropdown">
-          <a class="navbar-item" href="https://hypernerf.github.io">
-            HyperNeRF
-          </a>
-          <a class="navbar-item" href="https://nerfies.github.io">
-            Nerfies
-          </a>
-          <a class="navbar-item" href="https://latentfusion.github.io">
-            LatentFusion
-          </a>
-          <a class="navbar-item" href="https://photoshape.github.io">
-            PhotoShape
-          </a>
-        </div>
-      </div>
-    </div>
-
-  </div>
-</nav> -->
-
-
 <section class="hero">
   <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
+    <div class="container is-full">
+      <div class="columns is-full">
         <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title" style="font-size: 2.5rem;">Hypo3D: Exploring Hypothetical Reasoning in 3D</h1>
+          <div class="columns is-vcentered is-centered">
+            <div class="column is-narrow">
+              <img src="./static/hypo_icon.png" alt="Logo" style="height: 72px;">
+            </div>
+            <div class="column is-narrow">
+              <h1 style="
+                font-family: 'Bebas Neue', sans-serif;
+                font-size: 4rem;
+                font-weight: 900;
+                color: #4B3F72;
+                margin: 0;
+                letter-spacing: 0.5px;">
+                <span style="font-weight: 900;">Hypo</span><span style="font-weight: 700;">3D</span>
+              </h1>
+            </div>
+            
+          </div>
+          <h2 class="subtitle is-4" style="font-size: 2.5rem;margin-top: 1rem;">
+            Exploring Hypothetical Reasoning in 3D Scenes
+          </h2>
           <div class="is-size-5 publication-authors">
             <span class="author-block">
               <a href="https://yebulabula.github.io/">Ye Mao</a>,</span>
@@ -108,7 +87,7 @@
           </div>
 
           <div class="is-size-5 publication-authors">
-            <span class="author-block" style="background: linear-gradient(to right, #6a11cb, #2575fc); color: white; padding: 4px 10px; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.2); font-weight: 600;">
+            <span class="author-block" style="font-weight: bold; color: red;">
               ICML 2025
             </span>
           </div>
@@ -146,7 +125,6 @@
                 </a>
                   </a>
             </div>
-
           </div>
         </div>
       </div>
@@ -154,45 +132,409 @@
   </div>
 </section>
 
+<div style="margin-bottom: -100px;"></div>
 
+<!-- Optional: Font Awesome for navigation icons -->
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+  integrity="sha512-9teBqK5hnxZ5uwDiN1iB0ZrRVS+6X0AXOjBsyNazmzlMH6zWGiM05YIBgTdSV6zMZ2xZ1xi9wPNgInNq7EXp3Q=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
 
+<style>
+  body {
+    background: #f5f6fa;
+  }
 
+  .comparison-box {
+    background: #ffffff;
+    border-radius: 12px;
 
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Center the title by adding a centered text class -->
-    <!-- <h2 class="title is-3 has-text-centered">Zero-Shot 3D Classifictaion</h2> -->
-    <div class="hero-body">
-      <img id="teaser" src="./static/fig1.png" alt="Teaser" style="width:100%; height:auto;">
-      <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <h2 class="content has-text-justified">
-        <strong>Overview of the Hypo3D benchmark.</strong> (1) Examples of five types of context changes. (2) Presents sample questions, including scale-based and direction-based questions requiring spatial reasoning, as well as semantic questions. (3) The radar chart shows a significant performance gap between models and humans, especially in directional questions.
-      </h2>
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 2.5rem;
+    margin-top: 2.5rem;
+    position: relative; /* so nav buttons can be absolutely positioned */
+    overflow: hidden;   /* hide partial slides */
+  }
+
+  /* === Rolling window === */
+  .scroll-window {
+    display: flex;               /* lay slides in a row */
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory; /* force one-by-one snapping */
+    scroll-snap-stop: always;      /* stop at each slide */
+  }
+
+  .slide {
+    scroll-snap-align: start;
+    flex: 0 0 100%;
+    display: flex;
+    flex-direction: column; /* Stack vertically */
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    padding: 0rem;  
+    box-sizing: border-box;
+  }
+
+  .slide img {
+    max-height: 600px;            /* keep height consistent */
+    max-width: 100%;              /* don’t overflow horizontally */
+    height: auto;
+    width: auto;                  /* let image keep its natural aspect */
+  }
+
+  /* Optional: Hide scrollbar on WebKit browsers */
+  .scroll-window::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* === Navigation buttons === */
+  .nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background 0.2s;
+    z-index: 2;
+  }
+
+  .nav-btn:hover {
+    background: #f0f0f0;
+  }
+
+  .left-btn {
+    left: 20px; /* slightly outside the card */
+  }
+
+  .right-btn {
+    right: 20px; /* slightly outside the card */
+  }
+
+  @media (max-width: 768px) {
+    .left-btn,
+    .right-btn {
+      display: none; /* hide buttons on small screens, touch scroll instead */
+    }
+  }
+
+  /* === Caption === */
+  .caption {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+<section class="section">
+  <div class="container comparison-box">
+    <!-- Navigation buttons -->
+    <button class="nav-btn left-btn" aria-label="Scroll left">
+      <i class="fas fa-chevron-left"></i>
+    </button>
+    <button class="nav-btn right-btn" aria-label="Scroll right">
+      <i class="fas fa-chevron-right"></i>
+    </button>
+
+  <!-- Scrollable one-image-per-page row -->
+<div class="scroll-window">
+  <div class="slide">
+    <img src="./static/fig1.png" alt="Radar Chart" />
+    <div class="caption">
+      <p>
+        Overview of the Hypo3D benchmark. ① Examples of five types of context changes. ② Sample questions that include scale-based, direction-based, and semantic reasoning, all requiring open-ended answers. ③ A radar chart illustrates the significant performance gap between models and humans, especially on direction-based questions.
+      </p>
     </div>
   </div>
+
+  <div class="slide">
+    <img src="./static/fig2.png" alt="Bar Chart" />
+    <div class="caption">
+      <p>
+        Example of hypothetical reasoning in a 3D scene. Given a 3D scene and an anchor-based frame description (Scene Orientation), models first align the scene to the specified frame. Then, based on a context change description and a question, models hypothetically modify the aligned scene and answer questions about the changed scene.
+      </p>
+    </div>
+  </div>
+
+  <div class="slide">
+    <img src="./static/fig4.png" alt="Additional Chart" />
+    <div class="caption">
+      <p>
+        Dataset Statistics. ① Word cloud representing context change descriptions. ② Frequency distribution of context change types across 7,727 instances. ③ Distribution of question types across change categories, with question frequency consistently highest for scale-based, then direction-based, and finally semantic.
+      </p>
+    </div>
+  </div>
+</div>
+
 </section>
+
+<script>
+  // Simple scroll navigation
+  const scrollWindow = document.querySelector(".scroll-window");
+  const leftBtn = document.querySelector(".left-btn");
+  const rightBtn = document.querySelector(".right-btn");
+
+  function scrollAmount() {
+    // slide width = card's clientWidth (same as flex basis)
+    return scrollWindow.clientWidth;
+  }
+
+  leftBtn.addEventListener("click", () => {
+    scrollWindow.scrollBy({ left: -scrollAmount(), behavior: "smooth" });
+  });
+
+  rightBtn.addEventListener("click", () => {
+    scrollWindow.scrollBy({ left: scrollAmount(), behavior: "smooth" });
+  });
+
+  // Optional: hide buttons if no overflow
+  function toggleButtons() {
+    const maxScrollLeft = scrollWindow.scrollWidth - scrollWindow.clientWidth;
+    if (maxScrollLeft <= 0) {
+      leftBtn.style.display = rightBtn.style.display = "none";
+    } else {
+      leftBtn.style.display = rightBtn.style.display = "flex";
+    }
+  }
+
+  // Initial check & on resize
+  toggleButtons();
+  window.addEventListener("resize", toggleButtons);
+</script>
+</body>
+
+
 
   <!--/ Abstract. -->
   <section class="section">
     <div class="container is-max-desktop">
       <!-- Abstract. -->
-      <div class="columns is-centered has-text-centered">
-        <div class="column is-four-fifths">
-          <h2 class="title is-3"style="font-size: 1.5rem;">Abstract</h2>
+      <div class="columns is-full has-text-centered">
+        <div class="column is-full">
+          <h2 class="title is-3"style="font-size: 2.5rem;">Introduction</h2>
           <div class="content has-text-justified">
-            <p>
-              3D visual question answering (3D VQA), a key task for evaluating 3D reasoning, has advanced significantly with the rise of vision-language models and benchmark datasets. Existing 3D VQA benchmarks assume real-time scene accessibility during questioning, which is impractical due to the high cost of frequent scene updates. To this end, we introduce \textit{Hypothetical 3D Reasoning}, namely Hypo3D, a novel 3D VQA benchmark evaluating models' abilities to reason without access to the real-time scene. Models are required to hypothetically update the past scene based on the context change description before reasoning. The Hypo3D benchmark comprises 7,727 context changes across 700 indoor scenes, resulting in 14,885 question-answer pairs. An anchor-based world frame is established for all scenes, ensuring that directional terms in context changes and QAs are consistently referenced to a fixed coordinate system. Extensive experiments reveal that state-of-the-art foundation models struggle with reasoning in hypothetically changed scenes compared to humans, particularly in scenarios involving movement changes and directional reasoning. Even when the context change is irrelevant to the question, models often incorrectly adjust their answers. The benchmark will be publicly released.
+            <p style="font-size: 1.25rem;">
+              The rise of <b>vision-language foundation models</b> marks an advancement in bridging the gap between human and machine capabilities in 3D scene reasoning. Existing 3D reasoning benchmarks assume real-time scene accessibility, which is impractical due to the high cost of frequent scene updates. To this end, we introduce <b><i>Hypothetical 3D Reasoning</i></b>, namely Hypo3D, a benchmark designed to evaluate models' ability to reason without access to real-time scene data. Models need to imagine the scene state based on a provided change description before reasoning. Hypo3D is formulated as a 3D Visual Question Answering benchmark, comprising 7,727 context changes across 700 indoor scenes, resulting in 14,885 question-answer pairs. An anchor-based world frame is established for all scenes, ensuring consistent reference to a global frame for directional terms in context changes and QAs. Extensive experiments show that state-of-the-art models struggle to reason effectively in <b>hypothetically changed scenes</b>. This reveals a substantial performance gap compared to humans, particularly in scenarios involving <b>movement changes</b> and directional reasoning. Even when the change is irrelevant to the question, models often incorrectly adjust their answers.
             </p>
           </div>
+          
         </div>
       </div>
 
+
+
+<head>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background-color: #f8f9fa;
+      padding: 30px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin: 0 0 10px;
+      font-size: 15px;
+      color: #555;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #e9ecef;
+      color: #fff;
+    }
+
+    td {
+      border-top: 1px solid #dee2e6;
+    }
+
+    tr:nth-child(even) td:not(.group-header) {
+      background-color: #f1f3f5;
+    }
+
+    td.model {
+      text-align: left;
+      font-weight: 500;
+    }
+
+    td.model u {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    td.model b {
+      color: #1d3557;
+    }
+
+    .group-header {
+      background-color: #dee2e6;
+      font-weight: bold;
+      text-align: left;
+      font-size: 15px;
+      padding: 8px 10px;
+      color: #212529;
+    }
+
+    tr:hover td {
+      background-color: #e2e6ea;
+    }
+
+    b {
+      color: #e63946;
+    }
+
+    u {
+      text-decoration: underline dotted #495057;
+    }
+
+    caption {
+      caption-side: top;
+      margin-bottom: 10px;
+      font-size: 16px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <h2 class="title is-3" style="font-size: 2.5rem; text-align: center; margin-top: 30px;">Hypo3D Leaderboard</h2>
+  <p><strong>Table 1.</strong> EM and PM accuracy of ten foundation models and human evaluators on Hypo3D.</p>
+  <p>The highest model performance for each type of context change is in <b>bold</b>, while the best-performing model within each family is <u>underlined</u>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Model</th>
+        <th colspan="2">Movement</th>
+        <th colspan="2">Removal</th>
+        <th colspan="2">Attribute</th>
+        <th colspan="2">Addition</th>
+        <th colspan="2">Replacement</th>
+        <th colspan="2">Overall</th>
+      </tr>
+      <tr>
+        <th>EM</th><th>PM</th>
+        <th>EM</th><th>PM</th>
+        <th>EM</th><th>PM</th>
+        <th>EM</th><th>PM</th>
+        <th>EM</th><th>PM</th>
+        <th>EM</th><th>PM</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <!-- Group: LLM (Scene Caption) -->
+      <tr><td class="group-header" colspan="13">📝 LLM (Scene Caption)</td></tr>
+      <tr>
+        <td class="model">Llama-3.2 3B</td><td>25.31</td><td>28.37</td><td>29.85</td><td>33.65</td><td>24.95</td><td>29.59</td><td>26.78</td><td>30.78</td><td>23.75</td><td>27.68</td><td>26.08</td><td>29.91</td>
+      </tr>
+      <tr>
+        <td class="model"><u>GPT-4o API (Text)</u></td><td><b>35.76</b></td><td><b>38.66</b></td><td><b>36.88</b></td><td><b>41.71</b></td><td><b>34.05</b></td><td><b>39.58</b></td><td><b>39.74</b></td><td><b>43.28</b></td><td><b>31.33</b></td><td><b>35.24</b></td><td><b>35.54</b></td><td><b>39.65</b></td>
+      </tr>
+
+      <!-- Group: 2D VLM (Non-Semantic Top-View Map) -->
+      <tr><td class="group-header" colspan="13">🗺️ 2D VLM (Non-Semantic Top-View Map)</td></tr>
+      <tr>
+        <td class="model">Qwen2-VL 7B</td><td>29.23</td><td>35.08</td><td>30.71</td><td>34.69</td><td>29.04</td><td>33.94</td><td>31.48</td><td>35.17</td><td>28.41</td><td>33.10</td><td>29.68</td><td>34.47</td>
+      </tr>
+      <tr>
+        <td class="model"><u>Qwen2-VL 72B</u></td><td>33.02</td><td>37.38</td><td>33.88</td><td>37.57</td><td>33.48</td><td>37.62</td><td>35.95</td><td>40.29</td><td>30.66</td><td>34.64</td><td>33.39</td><td>37.51</td>
+      </tr>
+      <tr>
+        <td class="model">LLaVA-OV 7B</td><td>30.34</td><td>34.17</td><td>29.81</td><td>33.24</td><td>31.37</td><td>36.13</td><td>33.12</td><td>35.64</td><td>28.41</td><td>31.81</td><td>30.62</td><td>34.34</td>
+      </tr>
+      <tr>
+        <td class="model"><u>LLaVA-OV 72B</u></td><td><b>36.46</b></td><td><b>39.83</b></td><td><b>36.45</b></td><td><b>40.22</b></td><td><b>35.70</b></td><td><b>40.46</b></td><td><b>39.64</b></td><td><b>42.25</b></td><td><b>33.83</b></td><td><b>37.85</b></td><td><b>36.38</b></td><td><b>40.13</b></td>
+      </tr>
+      <tr>
+        <td class="model">Claude 3.5 Sonnet API</td><td>17.49</td><td>30.24</td><td>19.90</td><td>27.34</td><td>22.96</td><td>33.47</td><td>22.90</td><td>31.61</td><td>20.35</td><td>27.70</td><td>20.42</td><td>30.29</td>
+      </tr>
+      <tr>
+        <td class="model">GPT-4o API</td><td>34.49</td><td>37.69</td><td>32.85</td><td>36.53</td><td>31.23</td><td>35.38</td><td>38.09</td><td>40.70</td><td>30.04</td><td>33.22</td><td>33.58</td><td>36.75</td>
+      </tr>
+
+      <!-- Group: 2D VLM (Semantic Top-View Map) -->
+      <tr><td class="group-header" colspan="13">🗺️ 2D VLM (Semantic Top-View Map)</td></tr>
+      <tr>
+        <td class="model">Qwen2-VL 7B</td><td>31.26</td><td>36.41</td><td>38.09</td><td>41.90</td><td>34.83</td><td>39.41</td><td>37.64</td><td>41.41</td><td>31.86</td><td>36.62</td><td>34.40</td><td>38.91</td>
+      </tr>
+      <tr>
+        <td class="model"><u>Qwen2-VL 72B</u></td><td>38.42</td><td>42.56</td><td>47.36</td><td>51.05</td><td>46.76</td><td>51.10</td><td>47.63</td><td>50.87</td><td>44.43</td><td>48.78</td><td>44.25</td><td>48.25</td>
+      </tr>
+      <tr>
+        <td class="model">LLaVA-OV 7B</td><td>33.32</td><td>36.80</td><td>34.34</td><td>37.84</td><td>34.98</td><td>39.50</td><td>38.96</td><td>41.98</td><td>33.93</td><td>38.33</td><td>34.81</td><td>38.60</td>
+      </tr>
+      <tr>
+        <td class="model"><u>LLaVA-OV 72B</u></td><td>39.39</td><td>42.99</td><td>43.44</td><td>46.87</td><td>44.57</td><td>49.37</td><td>46.12</td><td>49.06</td><td>44.10</td><td>48.18</td><td>43.01</td><td>46.83</td>
+      </tr>
+      <tr>
+        <td class="model">Claude 3.5 Sonnet API</td><td>30.92</td><td>42.98</td><td>40.26</td><td>48.54</td><td>42.29</td><td><b>52.72</b></td><td>43.16</td><td>51.59</td><td>43.28</td><td><b>50.73</b></td><td>38.86</td><td>48.65</td>
+      </tr>
+      <tr>
+        <td class="model"><u><b>GPT-4o API</b></u></td><td><b>40.77</b></td><td><b>43.79</b></td><td><b>47.36</b></td><td><b>50.40</b></td><td>47.42</td><td>51.39</td><td><b>50.59</b></td><td><b>53.77</b></td><td>44.24</td><td>47.68</td><td><b>45.50</b></td><td><b>48.82</b></td>
+      </tr>
+
+      <!-- Group: 3D VLM -->
+      <tr><td class="group-header" colspan="13">🧊 3D VLM (RGB-D Video, Point Cloud)</td></tr>
+      <tr>
+        <td class="model">LEO 7B</td><td>14.40</td><td>22.96</td><td>18.54</td><td>22.82</td><td>14.35</td><td>21.56</td><td>14.64</td><td>24.83</td><td>11.76</td><td>19.50</td><td>14.83</td><td>22.40</td>
+      </tr>
+      <tr>
+        <td class="model"><u>LLaVA-3D 7B</u></td><td><b>31.63</b></td><td><b>35.11</b></td><td><b>30.60</b></td><td><b>33.91</b></td><td><b>31.60</b></td><td><b>36.16</b></td><td><b>33.67</b></td><td><b>36.70</b></td><td><b>30.42</b></td><td><b>34.16</b></td><td><b>31.56</b></td><td><b>35.23</b></td>
+      </tr>
+
+      <!-- Group: Human -->
+      <tr><td class="group-header" colspan="13">👨‍🔬 Human</td></tr>
+      <tr>
+        <td class="model">Human</td><td>95.00</td><td>96.00</td><td>93.00</td><td>95.00</td><td>93.00</td><td>94.83</td><td>89.00</td><td>90.67</td><td>85.00</td><td>86.00</td><td>91.00</td><td>92.50</td>
+      </tr>
+
+    </tbody>
+  </table>
+</body>
+
+<div style="height: 40px;"></div> <!-- Spacer added -->
+
 <section class="hero teaser">
   <div class="container is-max-desktop">
     <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered" style="font-size: 1.5rem;"> Example of hypothetical reasoning in a 3D scene.</h2>
+    <h2 class="title is-3 has-text-centered"style="font-size: 2.5rem;">Qualitative Visualizations</h2>
     <div class="hero-body">
-      <img id="teaser" src="./static/fig2.png" alt="Teaser" style="width:100%; height:auto;">
+      <img id="teaser" src="./static/1.2.png" alt="Teaser" style="width:200%; height:auto;">
       <!-- Remove the centered text class from the subtitle for left-right text alignment -->
       <!-- <h2 class="content has-text-justified">
         <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>, OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction and for few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
@@ -201,106 +543,19 @@
   </div>
 </section>
 
-
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered"style="font-size: 1.5rem;">Quantitative Results</h2>
-    <div class="hero-body">
-      <img id="teaser" src="./static/1.1.png" alt="Teaser" style="width:100%; height:auto;">
-      <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <!-- <h2 class="content has-text-justified">
-        <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>, OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction and for few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
-      </h2> -->
-    </div>
-  </div>
-</section>
-
-
-<section class="hero teaser">
-  <div class="container is-max-desktop">
-    <!-- Center the title by adding a centered text class -->
-    <h2 class="title is-3 has-text-centered"style="font-size: 1.5rem;">Qualitative Visualizations</h2>
-    <div class="hero-body">
-      <img id="teaser" src="./static/1.2.png" alt="Teaser" style="width:100%; height:auto;">
-      <!-- Remove the centered text class from the subtitle for left-right text alignment -->
-      <!-- <h2 class="content has-text-justified">
-        <strong>Overview of OpenDlign.</strong> In <strong>(a)</strong>, OpenDlign converts point clouds into multi-view depth maps using a contour-aware projection, which then helps generate depth-aligned RGB images with diverse textures, geometrically and semantically aligned with the maps. A transformer block, residually connected to the CLIP image encoder, is fine-tuned to align depth maps with depth-aligned images for robust 3D representation. For zero-shot classification <strong>(b)</strong>, OpenDlign aggregates multi-view logits from both pre-trained and fine-tuned encoders for label prediction and for few-shot classification <strong>(c)</strong>, it employs a logistic regressor trained on multi-view features from the encoders.
-      </h2> -->
-    </div>
-  </div>
-</section>
-
-<!-- <section class="hero is-light is-small">
-  <div class="hero-body">
+  <section class="section">
     <div class="container">
-      <div id="results-carousel" class="carousel results-carousel">
-        <div class="item item-steve">
-          <img poster="" id="steve" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/Figure2.png"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-chair-tp">
-          <video poster="" id="chair-tp" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/chair-tp.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-shiba">
-          <video poster="" id="shiba" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/shiba.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-fullbody">
-          <video poster="" id="fullbody" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/fullbody.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-blueshirt">
-          <video poster="" id="blueshirt" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/blueshirt.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-mask">
-          <video poster="" id="mask" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/mask.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-coffee">
-          <video poster="" id="coffee" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/coffee.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-        <div class="item item-toby">
-          <video poster="" id="toby" autoplay controls muted loop playsinline height="100%">
-            <source src="./static/videos/toby2.mp4"
-                    type="video/mp4">
-          </video>
-        </div>
-      </div>
+      <h2 class="title is-4" style="color: #4B3F72;">🔍 Five Key Insights from the Hypo3D Benchmark</h2>
+      <ul style="list-style-type: none; padding-left: 0; font-size: 1.1rem; line-height: 1.8;">
+        <li><strong><em>Insight 1:</em></strong> Models struggle with hypothetical movement and replacement changes.</li>
+        <li><strong><em>Insight 2:</em></strong> Models struggle with direction-based questions.</li>
+        <li><strong><em>Insight 3:</em></strong> Anchor-based frame definition improves orientation understanding.</li>
+        <li><strong><em>Insight 4:</em></strong> Reasoning in hypothetically changed scenes is more challenging than in unchanged scenes.</li>
+        <li><strong><em>Insight 5:</em></strong> Models hallucinate when changes are irrelevant.</li>
+      </ul>
     </div>
-  </div>
-</section>
-
-
-
-
-<section class="section">
-  <div class="container is-max-desktop">
-
-    <div class="columns is-centered">
-
-       <-- -->
-
-
+  </section>
+  
 <section class="section" id="BibTeX">
   <div class="container is-max-desktop content">
     <h2 class="title">BibTeX</h2>
@@ -314,25 +569,24 @@
 </section>
 
 
-<footer class="footer">
+<footer class="footer" style="background-color: #f5f5f5; padding: 2rem 1.5rem;">
   <div class="container">
     <div class="content has-text-centered">
-      <a class="icon-link"
-         href="./static/videos/nerfies_paper.pdf">
-        <i class="fas fa-file-pdf"></i>
+      <a class="icon-link" href="./static/videos/nerfies_paper.pdf" style="margin-right: 1rem;">
+        <i class="fas fa-file-pdf fa-lg"></i>
       </a>
-      <a class="icon-link" href="https://github.com/Yebulabula" class="external-link" disabled>
-        <i class="fab fa-github"></i>
+      <a class="icon-link" href="https://github.com/Yebulabula">
+        <i class="fab fa-github fa-lg"></i>
       </a>
     </div>
+
     <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
+      <div class="column is-12">
+        <div class="content has-text-centered">
           <p>
-            This website is borrowed from <a
-              href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under a <a rel="license"
-              href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-Commons Attribution-ShareAlike 4.0 International License</a>.
+            This website is borrowed from 
+            <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>, licensed under a 
+            <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
           </p>
         </div>
       </div>
