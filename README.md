@@ -6,21 +6,37 @@
     <a href="https://tomtomtommi.github.io/" target="_blank" style="text-decoration: none;">Junpeng Jing</a>,&nbsp;
     <a href="https://anlanqiu.github.io/" target="_blank" style="text-decoration: none;">Anlan Qiu</a>,&nbsp;
     <a href="https://www.imperial.ac.uk/people/k.mikolajczyk"  target="_blank" style="text-decoration: none;">Krystian Mikolajczyk</a>&nbsp;<br/>
-&nbsp;Imperial College London<br/>
-<a href="https://matchlab-imperial.github.io/Hypo3D/" title="Website" target="_blank" rel="nofollow" style="text-decoration: none;">🌎Project Website</a> |
-<a href="https://arxiv.org/abs/2502.00954" title="aXiv" target="_blank" rel="nofollow" style="text-decoration: none;">📄 arXiv</a> 
+&nbsp;<strong>Imperial College London</strong><br/>
+
+<div align="center">
+  <a href="https://arxiv.org/abs/2502.00954" target="_blank" rel="external nofollow noopener">
+  <img src="https://img.shields.io/badge/Paper-arXiv-deepgreen" alt="Paper arXiv"></a>
+  <a href="https://matchlab-imperial.github.io/Hypo3D/" target="_blank" rel="external nofollow noopener">
+  <img src="https://img.shields.io/badge/Page-Hypo3D-9cf" alt="Project Page"></a>
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSe--CkKIw_aXZpHHIv3OEt2psPsMdqKNkl1NRQN3vd92wHjvA/viewform" rel="external nofollow noopener" target="_blank">
+  <img src="https://img.shields.io/badge/Data-Hypo3D-blue" alt="Data"></a>
+</div>
 </p>
 
-## 📣 News
+## 📣 Latest Updates
 
-- **[2025-02-04]: Hypo3D paper preprint is available on arXiv**
-- **[2025-02-09]: Hypo3D benchmark released**
-- **[2025-02-09]: Evaluation scripts for various vision-language models are released**
+- **[2025-05-01]** 🎉 *Hypo3D has been accepted to ICML 2025!*
+- **[2025-02-04]** 📝 *Hypo3D paper preprint is now available on [arXiv](https://arxiv.org/abs/your-link).*
+- **[2025-02-09]** 📊 *Hypo3D benchmark has been released.*
+- **[2025-02-09]** 🧪 *Evaluation scripts for multiple vision-language models are now publicly available.*
 
-## Key Takeaways:
-> * Hypo3D Task Definition: Given a past 3D scene (e.g., point cloud, top-view image, scene captions, etc) and a context change description, the task objective is to first imagine the current scene state after the change and answer the questions in the hypothetically changed scene.
+## 🔑 Key Takeaways
 
-> * The benchmark consists of 7,727 context changes and 14,885 question-answer pairs across 700 indoor scenes. These context changes span five categories: (1) Movement Change, involving geometric transformations like translation or rotation; (2) Removal Change, taking away objects; (3) Attribute Change, modifying object properties such as color and state; (4) Addition Change, introducing new objects; and (5) Replacement Change, substituting existing objects with new ones.
+- **Hypo3D** introduces a novel 3D reasoning benchmark.  
+  🧠 **Task Definition**: Given a *past* 3D scene (e.g., point cloud, top-view image, scene captions) and a **context change description**, the goal is to *imagine* the updated scene after the change and answer questions based on that **hypothetical** scene state.
+
+- The benchmark includes **7,727 context changes** and **14,885 QA pairs** spanning **700 indoor scenes**.  
+  These changes are categorized into five types:  
+  1. **Movement** — Geometric transformations (e.g., translation, rotation)  
+  2. **Removal** — Objects taken away from the scene  
+  3. **Attribute** — Changes in object properties (e.g., color, open/closed state)  
+  4. **Addition** — New objects introduced into the scene  
+  5. **Replacement** — Existing objects substituted with different ones
 
 ![sicl](docs/static/fig1.png)
 
@@ -68,13 +84,39 @@ Hypo3D/
     ```
 5. Complete the [form](https://forms.gle/w6NCaDjY9FzdSZFEA) to download Hypo3D dataset
 
+### 📊 Hypo3D: EM (Exact Match) / PM (Partial Match) Accuracy of Foundation Models
+
+| Model Family                    | Model                  | EM (%) | PM (%) |
+|--------------------------------|------------------------|--------|--------|
+| **LLM (Scene Caption)**        | Llama-3.2 3B           | 26.08  | 29.91  |
+|                                | GPT-4o API (Text)      | **35.54**  | **39.65**  |
+| **2D VLM (Non-Semantic Map)**  | Qwen2-VL 7B            | 29.68  | 34.47  |
+|                                | Qwen2-VL 72B           | 33.39  | 37.51  |
+|                                | LLaVA-OV 7B            | 30.62  | 34.34  |
+|                                | LLaVA-OV 72B           | **36.38**  | **40.13**  |
+|                                | Claude 3.5 Sonnet API  | 20.70  | 30.12  |
+|                                | GPT-4o API             | 33.58  | 36.75  |
+| **2D VLM (Semantic Map)**      | Qwen2-VL 7B            | 34.40  | 38.91  |
+|                                | Qwen2-VL 72B           | 42.45  | 48.25  |
+|                                | LLaVA-OV 7B            | 38.93  | 43.51  |
+|                                | LLaVA-OV 72B           | 43.81  | 46.83  |
+|                                | Claude 3.5 Sonnet API  | 41.36  | 51.59  |
+|                                | GPT-4o API             | **45.50**  | **48.82**  |
+| **3D VLM (RGB-D Video/Point Cloud)**       | LEO 7B                 | 14.83  | 22.40  |
+|                                | LLaVA-3D 7B            | **31.56**  | **35.23**  |
+| **Human**                      |                        | 91.00  | 92.50  |
+
 
 ## Contact
 - Ye Mao: ye.mao21@imperial.ac.uk
-- Weixun Luo: weixun.luo19@imperial.ac.uk
-- Junpeng Jing: j.jing23@imperial.ac.uk
 
 Please open an issue or submit a pull request for issues, or contributions.
+
+## 💼 License
+
+<a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">
+  <img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" />
+</a>
 
 ## Citation
 
@@ -87,3 +129,5 @@ If you find our benchmark is helpful, please cite our paper:
   journal={arXiv preprint arXiv:2502.00954},
   year={2025}
 }
+```
+
