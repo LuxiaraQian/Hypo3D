@@ -347,81 +347,104 @@
       padding: 30px;
       color: #333;
     }
-
+    
+    /* Headings & copy ------------------------------------------------ */
     h1 {
       font-size: 24px;
       margin-bottom: 0.5em;
     }
-
+    
     p {
       margin: 0 0 10px;
       font-size: 15px;
       color: #555;
     }
-
+    
+    /* Table shell ---------------------------------------------------- */
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 20px;
       box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
       overflow: hidden;
       background: #fff;
-    }
-
-    th, td {
-      padding: 10px 12px;
+    
+      /* Your “quick way” to centre everything:                       */
       text-align: center;
     }
-
+    
+    /* Common cell padding */
+    th,
+    td {
+      padding: 10px 12px;
+    }
+    
+    /* Column headings (stay centred) */
     th {
       background-color: #e9ecef;
       color: #fff;
+      text-align: left;     /* explicit so they’re still centred   */
     }
-
-    td {
-      border-top: 1px solid #dee2e6;
+    
+    /* ── KEY OVERRIDES ───────────────────────────────────────────────
+       Any data cell that is *not* the model label and *not* a group
+       header is left-aligned.  This selector comes *after* the table
+       rule, so it wins.                                              */
+    tbody td:not(.model):not(.group-header) {
+      text-align: center;
     }
-
-    tr:nth-child(even) td:not(.group-header) {
-      background-color: #f1f3f5;
-    }
-
+    
+    /* Model-label column */
     td.model {
-      text-align: left;
       font-weight: 500;
+      text-align: left;
     }
-
+    
     td.model u {
       text-decoration: underline;
       text-underline-offset: 4px;
     }
-
+    
     td.model b {
       color: #1d3557;
     }
-
+    
+    /* Group header rows */
     .group-header {
       background-color: #dee2e6;
       font-weight: bold;
       text-align: left;
-      font-size: 15px;
+      font-size: 20px;
       padding: 8px 10px;
       color: #212529;
     }
-
+    
+    /* Row hover effect */
     tr:hover td {
       background-color: #e2e6ea;
     }
-
+    
+    /* Zebra rows (skip group headers) */
+    tr:nth-child(even) td:not(.group-header) {
+      background-color: #f1f3f5;
+    }
+    
+    /* Inline emphasis */
     b {
       color: #e63946;
     }
-
+    
     u {
       text-decoration: underline dotted #495057;
     }
-
+    
+    .human-row {
+        background-color: #e74236;  /* soft highlight background */
+        color: #1d3557;             /* dark readable text */
+        font-weight: bold;          /* optional for emphasis */
+    }
+    /* Caption */
     caption {
       caption-side: top;
       margin-bottom: 10px;
@@ -438,93 +461,66 @@
   <table>
     <thead>
       <tr>
-        <th rowspan="2">Model</th>
-        <th colspan="2">Movement</th>
-        <th colspan="2">Removal</th>
-        <th colspan="2">Attribute</th>
-        <th colspan="2">Addition</th>
-        <th colspan="2">Replacement</th>
-        <th colspan="2">Overall</th>
-      </tr>
-      <tr>
-        <th>EM</th><th>PM</th>
-        <th>EM</th><th>PM</th>
-        <th>EM</th><th>PM</th>
-        <th>EM</th><th>PM</th>
-        <th>EM</th><th>PM</th>
-        <th>EM</th><th>PM</th>
+        <th>Model</th>
+        <th>Movement</th>
+        <th>Removal</th>
+        <th>Attribute</th>
+        <th>Addition</th>
+        <th>Replacement</th>
+        <th>Overall</th>
       </tr>
     </thead>
     <tbody>
-
+  
       <!-- Group: LLM (Scene Caption) -->
-      <tr><td class="group-header" colspan="13">LLM (Scene Caption)</td></tr>
+      <tr><td class="group-header" colspan="7">LLM (Scene Caption)</td></tr>
       <tr>
-        <td class="model">Llama-3.2 3B</td><td>25.31</td><td>28.37</td><td>29.85</td><td>33.65</td><td>24.95</td><td>29.59</td><td>26.78</td><td>30.78</td><td>23.75</td><td>27.68</td><td>26.08</td><td>29.91</td>
+        <td class="model">Llama-3.2 3B</td><td>25.31</td><td>29.85</td><td>24.95</td><td>26.78</td><td>23.75</td><td>26.08</td>
       </tr>
       <tr>
-        <td class="model">GPT-4o API (Text)</td><td><b>35.76</b></td><td><b>38.66</b></td><td><b>36.88</b></td><td><b>41.71</b></td><td><b>34.05</b></td><td><b>39.58</b></td><td><b>39.74</b></td><td><b>43.28</b></td><td><b>31.33</b></td><td><b>35.24</b></td><td><b>35.54</b></td><td><b>39.65</b></td>
+        <td class="model">GPT-4o API (Text)</td><td><b>35.76</b></td><td><b>36.88</b></td><td><b>34.05</b></td><td><b>39.74</b></td><td><b>31.33</b></td><td><b>35.54</b></td>
       </tr>
-
-      <!-- Group: 2D VLM (Non-Semantic Top-View Map) -->
-      <!-- <tr><td class="group-header" colspan="13">🗺️ 2D VLM (Non-Semantic Top-View Map)</td></tr>
-      <tr>
-        <td class="model">Qwen2-VL 7B</td><td>29.23</td><td>35.08</td><td>30.71</td><td>34.69</td><td>29.04</td><td>33.94</td><td>31.48</td><td>35.17</td><td>28.41</td><td>33.10</td><td>29.68</td><td>34.47</td>
-      </tr>
-      <tr>
-        <td class="model">Qwen2-VL 72B</td><td>33.02</td><td>37.38</td><td>33.88</td><td>37.57</td><td>33.48</td><td>37.62</td><td>35.95</td><td>40.29</td><td>30.66</td><td>34.64</td><td>33.39</td><td>37.51</td>
-      </tr>
-      <tr>
-        <td class="model">LLaVA-OV 7B</td><td>30.34</td><td>34.17</td><td>29.81</td><td>33.24</td><td>31.37</td><td>36.13</td><td>33.12</td><td>35.64</td><td>28.41</td><td>31.81</td><td>30.62</td><td>34.34</td>
-      </tr>
-      <tr>
-        <td class="model">LLaVA-OV 72B</td><td><b>36.46</b></td><td><b>39.83</b></td><td><b>36.45</b></td><td><b>40.22</b></td><td><b>35.70</b></td><td><b>40.46</b></td><td><b>39.64</b></td><td><b>42.25</b></td><td><b>33.83</b></td><td><b>37.85</b></td><td><b>36.38</b></td><td><b>40.13</b></td>
-      </tr>
-      <tr>
-        <td class="model">Claude 3.5 Sonnet API</td><td>17.49</td><td>30.24</td><td>19.90</td><td>27.34</td><td>22.96</td><td>33.47</td><td>22.90</td><td>31.61</td><td>20.35</td><td>27.70</td><td>20.42</td><td>30.29</td>
-      </tr>
-      <tr>
-        <td class="model">GPT-4o API</td><td>34.49</td><td>37.69</td><td>32.85</td><td>36.53</td><td>31.23</td><td>35.38</td><td>38.09</td><td>40.70</td><td>30.04</td><td>33.22</td><td>33.58</td><td>36.75</td>
-      </tr> -->
-
+  
       <!-- Group: 2D VLM (Semantic Top-View Map) -->
-      <tr><td class="group-header" colspan="13">2D VLM (Semantic Top-View Map)</td></tr>
+      <tr><td class="group-header" colspan="7">2D VLM (Semantic Top-View Map)</td></tr>
       <tr>
-        <td class="model">Qwen2-VL 7B</td><td>31.26</td><td>36.41</td><td>38.09</td><td>41.90</td><td>34.83</td><td>39.41</td><td>37.64</td><td>41.41</td><td>31.86</td><td>36.62</td><td>34.40</td><td>38.91</td>
+        <td class="model">Qwen2-VL 7B</td><td>31.26</td><td>38.09</td><td>34.83</td><td>37.64</td><td>31.86</td><td>34.40</td>
       </tr>
       <tr>
-        <td class="model">Qwen2-VL 72B</td><td>38.42</td><td>42.56</td><td>47.36</td><td>51.05</td><td>46.76</td><td>51.10</td><td>47.63</td><td>50.87</td><td><b>44.43</b></td><td>48.78</td><td>44.25</td><td>48.25</td>
+        <td class="model">Qwen2-VL 72B</td><td>38.42</td><td><b>47.36</b></td><td>46.76</td><td>47.63</td><td><b>44.43</b></td><td>44.25</td>
       </tr>
       <tr>
-        <td class="model">LLaVA-OV 7B</td><td>33.32</td><td>36.80</td><td>34.34</td><td>37.84</td><td>34.98</td><td>39.50</td><td>38.96</td><td>41.98</td><td>33.93</td><td>38.33</td><td>34.81</td><td>38.60</td>
+        <td class="model">LLaVA-OV 7B</td><td>33.32</td><td>34.34</td><td>34.98</td><td>38.96</td><td>33.93</td><td>34.81</td>
       </tr>
       <tr>
-        <td class="model">LLaVA-OV 72B</td><td>39.39</td><td>42.99</td><td>43.44</td><td>46.87</td><td>44.57</td><td>49.37</td><td>46.12</td><td>49.06</td><td>44.10</td><td>48.18</td><td>43.01</td><td>46.83</td>
+        <td class="model">LLaVA-OV 72B</td><td>39.39</td><td>43.44</td><td>44.57</td><td>46.12</td><td>44.10</td><td>43.01</td>
       </tr>
       <tr>
-        <td class="model">Claude 3.5 Sonnet API</td><td>30.92</td><td>42.98</td><td>40.26</td><td>48.54</td><td>42.29</td><td><b>52.72</b></td><td>43.16</td><td>51.59</td><td>43.28</td><td><b>50.73</b></td><td>38.86</td><td>48.65</td>
+        <td class="model">Claude 3.5 Sonnet API</td><td>30.92</td><td>40.26</td><td>42.29</td><td>43.16</td><td>43.28</td><td>38.86</td>
       </tr>
       <tr>
-        <td class="model"><b>GPT-4o API</b></td><td><b>40.77</b></td><td><b>43.79</b></td><td><b>47.36</b></td><td><b>50.40</b></td><td><b>47.42</b></td><td>51.39</td><td><b>50.59</b></td><td><b>53.77</b></td><td>44.24</td><td>47.68</td><td><b>45.50</b></td><td><b>48.82</b></td>
+        <td class="model">GPT-4o API</td><td><b>40.77</b></td><td>47.36</td><td><b>47.42</b></td><td><b>50.59</b></td><td>44.24</td><td><b>45.50</b></td>
       </tr>
-
+  
       <!-- Group: 3D VLM -->
-      <tr><td class="group-header" colspan="13">3D VLM (RGB-D Video, Point Cloud)</td></tr>
+      <tr><td class="group-header" colspan="7">3D VLM (RGB-D Video, Point Cloud)</td></tr>
       <tr>
-        <td class="model">LEO 7B</td><td>14.40</td><td>22.96</td><td>18.54</td><td>22.82</td><td>14.35</td><td>21.56</td><td>14.64</td><td>24.83</td><td>11.76</td><td>19.50</td><td>14.83</td><td>22.40</td>
+        <td class="model">LEO 7B</td><td>14.40</td><td>18.54</td><td>14.35</td><td>14.64</td><td>11.76</td><td>14.83</td>
       </tr>
       <tr>
-        <td class="model">LLaVA-3D 7B</td><td><b>31.63</b></td><td><b>35.11</b></td><td><b>30.60</b></td><td><b>33.91</b></td><td><b>31.60</b></td><td><b>36.16</b></td><td><b>33.67</b></td><td><b>36.70</b></td><td><b>30.42</b></td><td><b>34.16</b></td><td><b>31.56</b></td><td><b>35.23</b></td>
+        <td class="model">LLaVA-3D 7B</td><td><b>31.63</b></td><td><b>30.60</b></td><td><b>31.60</b></td><td><b>33.67</b></td><td><b>30.42</b></td><td><b>31.56</b></td>
       </tr>
-
+  
       <!-- Group: Human -->
-      <tr><td class="group-header" colspan="13">Human</td></tr>
-      <tr>
-        <td class="model">Human</td><td>95.00</td><td>96.00</td><td>93.00</td><td>95.00</td><td>93.00</td><td>94.83</td><td>89.00</td><td>90.67</td><td>85.00</td><td>86.00</td><td>91.00</td><td>92.50</td>
-      </tr>
-
+      <!-- <tr><td class="group-header" colspan="7">Human</td></tr>  -->
+      <tr class="human-row">
+        <td class="group-header">Human</td>
+        <td class="group-header">95.00</td><td class="group-header">93.00</td><td class="group-header">93.00</td><td class="group-header">89.00</td><td class="group-header">85.00</td><td class="group-header">91.00</td>
+    </tr>
+  
     </tbody>
   </table>
+  
 </body>
 
 <div style="height: 40px;"></div> <!-- Spacer added -->
