@@ -57,7 +57,7 @@ args = parser.parse_args()
 model = Qwen2VLForConditionalGeneration.from_pretrained(
     args.model_id,
     torch_dtype=torch.bfloat16,
-    attn_implementation="flash_attention_2",
+    # attn_implementation="flash_attention_2",
     device_map="auto"
 )
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -70,7 +70,7 @@ processor = AutoProcessor.from_pretrained(args.model_id, min_pixels=min_pixels, 
 
 # Load a local image
 data = json.load(open(args.data_path))
-images_dir = "/gpfs/home/ym621/dataset/2D_VLM_data/top_view_no_label"
+images_dir = "/mnt/pfs/zitao_team/luxiaoqian/Hypo3D/dataset/top_view_no_label"
 
 def convert_words_to_digits(text):
     words = text.split()
@@ -171,7 +171,8 @@ def partial_match_score(predicted, reference):
     return len(common_tokens) / len(ref_tokens) if len(ref_tokens) > 0 else 0
 
 # Text prompt
-template = '''
+# Baseline
+template0 = '''
 Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
 
 Scene Orientation: {}
@@ -184,6 +185,467 @@ Question: {}
 The answer should be a single word or short phrase.
 
 The answer is:
+'''
+
+
+# 5-shot
+template1 = '''
+Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
+
+=== 5-shot Example 1 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The black backpack has been moved to the laundry basket.
+Question: What is the position of the tissue box in comparison to the backpack?
+
+<original_image>
+- The backpack is originally located on the couch in the living room (center bottom of the image).
+- The laundry basket is at the left side of the bed, near the nightstand.
+- The tissue box is on the nightstand at the top side of the bed, near the headboard.
+</original_image>
+
+<change>
+The black backpack has been moved to the laundry basket.
+</change>
+
+<changed_image>
+- The backpack is now at the laundry basket, to the left side of the bed.
+- The tissue box remains on the nightstand at the top side of the bed.
+- Relative to the backpack’s new position, the tissue box is in front of it and slightly to the right.
+</changed_image>
+
+<think>
+Compare the backpack’s new position (by the laundry basket, left of the bed) to the tissue box (on the top nightstand).
+From that reference, the tissue box lies toward the head of the bed (front) and to the right.
+</think>
+
+<answer>
+front right
+</answer>
+
+=== 5-shot Example 2 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The stool that is closest to the guitar has been moved next to the couch, behind the backpack.
+Question: Is the stool placed higher or lower than the tissue box now?
+
+<original_image>
+- Multiple stools line the kitchen/table area to the left of the couch.
+- The guitar is near the center-left doorway; the closest stool to it is the topmost stool of that row.
+- The couch is centered; a backpack rests on its upper side.
+- The bed is in the upper center; a tissue box sits on the nightstand at the head (top) of the bed.
+</original_image>
+
+<change>
+The stool that is closest to the guitar has been moved next to the couch, behind the backpack.
+</change>
+
+<changed_image>
+- The selected stool is now adjacent to the couch, placed behind (toward the top side relative to the couch) the backpack.
+- The tissue box remains at the top side of the bed near the headboard, which is nearer to the very top of the scene than the couch area.
+</changed_image>
+
+<think>
+“Behind the backpack” puts the stool slightly above the couch but still well below the bed’s head area. The tissue box is at the very top side of the bed, closer to the scene’s top edge than the couch region. Therefore, in vertical placement, the stool is below the tissue box.
+</think>
+
+<answer>
+lower
+</answer>
+
+=== 5-shot Example 3 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The backpack has been moved onto the bed behind the pillow.
+Question: How many objects are now situated on the bed following the backpack’s movement?
+
+<original_image>
+- The bed is positioned at the upper center of the room.
+- On the bed, there are originally pillows placed near the headboard.
+- A tissue box is on the nightstand at the head of the bed (not on the bed itself).
+- Other objects (like the backpack) are not on the bed originally, but in the living room area (on the couch).
+</original_image>
+
+<change>  
+The backpack has been moved onto the bed behind the pillow.  
+</change>  
+
+<changed_image>
+- After the move, the backpack is now situated on the bed, directly behind the pillow.
+- So, the bed now contains two distinct object categories:
+  1. Pillows (already there)
+  2. Backpack (newly placed)
+</changed_image>
+
+<think>  
+Originally, only the pillows were on the bed. After the context change, the backpack is added onto the bed behind the pillow. Therefore, the number of objects situated on the bed is now two.  
+</think>  
+
+<answer>  
+2  
+</answer>  
+
+=== 5-shot Example 4 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The kitchen cabinet on top of the refrigerator has been removed.
+Question: Is it spatially possible to place the microwave in the spot where the kitchen cabinet was removed?
+
+<original_image>
+- The refrigerator is located in the bottom-left kitchen area.
+- Above the refrigerator, there is originally a kitchen cabinet mounted to the wall.
+- The microwave is currently placed on top of the counter, beside or integrated with other appliances (like the toaster oven).
+</original_image>
+
+<change>  
+The kitchen cabinet on top of the refrigerator has been removed.  
+</change>  
+
+<changed_image>
+- With the kitchen cabinet gone, there is now an open space directly above the refrigerator.
+- This location could potentially host another appliance.
+- The microwave is smaller in depth and height than a wall cabinet and could fit into the newly cleared space.
+</changed_image>
+
+<think>  
+The refrigerator’s top is wide and sturdy enough to support appliances, and removing the wall-mounted cabinet above creates sufficient vertical clearance. Since the microwave is typically smaller than the cabinet, it is spatially feasible to place the microwave in that cleared area.  
+</think>  
+
+<answer>  
+Yes  
+</answer>  
+
+=== 5-shot Example 5 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The trash can near the desk has been removed.
+Question: How many trash cans remain in the room after the change?
+
+<original_image>
+- There are multiple trash cans in the scene:
+- One is located near the desk in the upper-right/bedroom area.
+- Another trash can is placed in the kitchen area, close to the refrigerator.
+- A smaller bin may also be near the bathroom or doorway area.
+</original_image>
+
+<change>  
+The trash can near the desk has been removed.  
+</change>  
+
+<changed_image>
+- After the removal, the desk-side trash can is no longer present.
+- Remaining trash cans:
+  1. The kitchen trash can beside the refrigerator.
+  2. The additional bin near the doorway/bathroom area.
+</changed_image>
+
+<think>  
+Originally, there were at least three trash cans visible. Removing the one near the desk reduces the count by one, leaving two still in the room.  
+</think>  
+
+<answer>  
+2  
+</answer>  
+
+=== Now answer the new query following the same format. Only fill content inside the tags. ===
+
+Scene Orientation: {}
+
+Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
+
+Context Change: {}
+Question: {}
+
+<original_image>
+Extract spatial and structural information related to the query from the input image:
+Include objects, positional relationships, orientation, size, functional attributes, etc.
+</original_image>
+
+<change>
+{}
+</change>
+
+<changed_image>
+Update the scene, combining the change operation with the resulting object relations.
+</changed_image>
+
+<think>
+Reason step by step, explaining how to use the updated scene to answer the query.
+</think>
+
+<answer>
+(Output the concise final answer here)
+</answer>
+'''
+
+
+# 1-shot
+template2 = '''
+Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
+
+=== One-shot Example ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The black backpack has been moved to the laundry basket.
+Question: What is the position of the tissue box in comparison to the backpack?
+
+<original_image>
+- The backpack is originally located on the couch in the living room (center bottom of the image).
+- The laundry basket is at the left side of the bed, near the nightstand.
+- The tissue box is on the nightstand at the top side of the bed, near the headboard.
+</original_image>
+
+<change>
+The black backpack has been moved to the laundry basket.
+</change>
+
+<changed_image>
+- The backpack is now at the laundry basket, to the left side of the bed.
+- The tissue box remains on the nightstand at the top side of the bed.
+- Relative to the backpack’s new position, the tissue box is in front of it and slightly to the right.
+</changed_image>
+
+<think>
+Compare the backpack’s new position (by the laundry basket, left of the bed) to the tissue box (on the top nightstand).
+From that reference, the tissue box lies toward the head of the bed (front) and to the right.
+</think>
+
+<answer>
+front right
+</answer>
+
+=== Now answer the new query following the same format. Only fill content inside the tags. ===
+
+Scene Orientation: {}
+
+Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene.
+
+Context Change: {}
+Question: {}
+
+<original_image>
+Extract spatial and structural information related to the query from the input image:
+Include objects, positional relationships, orientation, size, functional attributes, etc.
+</original_image>
+
+<change>
+{}
+</change>
+
+<changed_image>
+Update the scene, combining the change operation with the resulting object relations.
+</changed_image>
+
+<think>
+Reason step by step, explaining how to use the updated scene to answer the query.
+</think>
+
+<answer>
+(Output the concise final answer here)
+</answer>
+'''
+
+
+# 5-shot v2
+template_v3 = '''
+Given a top-view of a 3D scene, mentally rotate the image to align with the specified orientation.
+
+=== 5-shot Example 1 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The black backpack has been moved to the laundry basket.
+Question: What is the position of the tissue box in comparison to the backpack?
+
+<original_image>
+- The backpack is originally located on the couch in the living room (center bottom of the image).
+- The laundry basket is at the left side of the bed, near the nightstand.
+- The tissue box is on the nightstand at the top side of the bed, near the headboard.
+</original_image>
+
+<change>
+The black backpack has been moved to the laundry basket.
+</change>
+
+<changed_image>
+- The backpack is now at the laundry basket, to the left side of the bed.
+- The tissue box remains on the nightstand at the top side of the bed.
+- Relative to the backpack’s new position, the tissue box is in front of it and slightly to the right.
+</changed_image>
+
+<think>
+Compare the backpack’s new position (by the laundry basket, left of the bed) to the tissue box (on the top nightstand).
+From that reference, the tissue box lies toward the head of the bed (front) and to the right.
+</think>
+
+<answer>
+front right
+</answer>
+
+=== 5-shot Example 2 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The stool that is closest to the guitar has been moved next to the couch, behind the backpack.
+Question: Is the stool placed higher or lower than the tissue box now?
+
+<original_image>
+- Multiple stools line the kitchen/table area to the left of the couch.
+- The guitar is near the center-left doorway; the closest stool to it is the topmost stool of that row.
+- The couch is centered; a backpack rests on its upper side.
+- The bed is in the upper center; a tissue box sits on the nightstand at the head (top) of the bed.
+</original_image>
+
+<change>
+The stool that is closest to the guitar has been moved next to the couch, behind the backpack.
+</change>
+
+<changed_image>
+- The selected stool is now adjacent to the couch, placed behind (toward the top side relative to the couch) the backpack.
+- The tissue box remains at the top side of the bed near the headboard, which is nearer to the very top of the scene than the couch area.
+</changed_image>
+
+<think>
+“Behind the backpack” puts the stool slightly above the couch but still well below the bed’s head area. The tissue box is at the very top side of the bed, closer to the scene’s top edge than the couch region. Therefore, in vertical placement, the stool is below the tissue box.
+</think>
+
+<answer>
+lower
+</answer>
+
+=== 5-shot Example 3 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The backpack has been moved onto the bed behind the pillow.
+Question: How many objects are now situated on the bed following the backpack’s movement?
+
+<original_image>
+- The bed is positioned at the upper center of the room.
+- On the bed, there are originally pillows placed near the headboard.
+- A tissue box is on the nightstand at the head of the bed (not on the bed itself).
+- Other objects (like the backpack) are not on the bed originally, but in the living room area (on the couch).
+</original_image>
+
+<change>  
+The backpack has been moved onto the bed behind the pillow.  
+</change>  
+
+<changed_image>
+- After the move, the backpack is now situated on the bed, directly behind the pillow.
+- So, the bed now contains two distinct object categories:
+  1. Pillows (already there)
+  2. Backpack (newly placed)
+</changed_image>
+
+<think>  
+Originally, only the pillows were on the bed. After the context change, the backpack is added onto the bed behind the pillow. Therefore, the number of objects situated on the bed is now two.  
+</think>  
+
+<answer>  
+2  
+</answer>  
+
+=== 5-shot Example 4 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The kitchen cabinet on top of the refrigerator has been removed.
+Question: Is it spatially possible to place the microwave in the spot where the kitchen cabinet was removed?
+
+<original_image>
+- The refrigerator is located in the bottom-left kitchen area.
+- Above the refrigerator, there is originally a kitchen cabinet mounted to the wall.
+- The microwave is currently placed on top of the counter, beside or integrated with other appliances (like the toaster oven).
+</original_image>
+
+<change>  
+The kitchen cabinet on top of the refrigerator has been removed.  
+</change>  
+
+<changed_image>
+- With the kitchen cabinet gone, there is now an open space directly above the refrigerator.
+- This location could potentially host another appliance.
+- The microwave is smaller in depth and height than a wall cabinet and could fit into the newly cleared space.
+</changed_image>
+
+<think>  
+The refrigerator’s top is wide and sturdy enough to support appliances, and removing the wall-mounted cabinet above creates sufficient vertical clearance. Since the microwave is typically smaller than the cabinet, it is spatially feasible to place the microwave in that cleared area.  
+</think>  
+
+<answer>  
+Yes  
+</answer>  
+
+=== 5-shot Example 5 ===
+
+Scene Orientation: North-facing (top is front)
+
+Context Change: The trash can near the desk has been removed.
+Question: How many trash cans remain in the room after the change?
+
+<original_image>
+- There are multiple trash cans in the scene:
+- One is located near the desk in the upper-right/bedroom area.
+- Another trash can is placed in the kitchen area, close to the refrigerator.
+- A smaller bin may also be near the bathroom or doorway area.
+</original_image>
+
+<change>  
+The trash can near the desk has been removed.  
+</change>  
+
+<changed_image>
+- After the removal, the desk-side trash can is no longer present.
+- Remaining trash cans:
+  1. The kitchen trash can beside the refrigerator.
+  2. The additional bin near the doorway/bathroom area.
+</changed_image>
+
+<think>  
+Originally, there were at least three trash cans visible. Removing the one near the desk reduces the count by one, leaving two still in the room.  
+</think>  
+
+<answer>  
+2  
+</answer>  
+
+=== Now answer the new query following the same format. Only fill content inside the tags. ===
+
+Scene Orientation: {}
+
+Now, given a context change, imagine how the scene would look after the change has been applied. Then, answer a question based on the changed scene. The image itself does not change.
+
+Context Change: {}
+Question: {}
+
+<original_image>
+Extract spatial and structural information related to the query from the input image:
+Include objects, positional relationships, orientation, size, functional attributes, etc.
+</original_image>
+
+<change>
+{}
+</change>
+
+<changed_image>
+Update the scene, combining the change operation with the resulting object relations.
+</changed_image>
+
+<think>
+Reason step by step, explaining how to use the updated scene to answer the query.
+</think>
+
+<answer>
+If the change is irrelevant to the question, keep the answer unchanged.
+Output only a single word/phrase, do not explain.
+</answer>
 '''
 
 
@@ -218,10 +680,10 @@ partial_match_scores_per_type = {}
 
 
 # read xlxs file
-df = pd.read_excel("Axis Definition.xlsx", sheet_name='Sheet1', engine='openpyxl')
+df = pd.read_excel("dataset/Axis Definition.xlsx", sheet_name='Sheet1', engine='openpyxl')
 
 # Main loop
-for scene_id, changes_list in list(data.items()):
+for scene_id, changes_list in list(data.items())[:50]:
     image_path = os.path.join(images_dir, f"{scene_id}.png")
     local_image = Image.open(image_path)
             
@@ -243,7 +705,7 @@ for scene_id, changes_list in list(data.items()):
             answer = qa['answer']
             
             # Prepare the prompt and inputs
-            text_prompt = template.format(scene_orientation, context_change, question)
+            text_prompt = template_v3.format(scene_orientation, context_change, question, context_change)
             
             # text_prompt = template.format(context_change, question)
             messages = [
@@ -272,7 +734,7 @@ for scene_id, changes_list in list(data.items()):
             inputs = {k: v.to(device) for k, v in inputs.items()}
 
             # Inference: Generation of the outputs
-            generated_ids = model.generate(**inputs, max_new_tokens=128)
+            generated_ids = model.generate(**inputs, max_new_tokens=2048)
             generated_ids_trimmed = [
                 out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs["input_ids"], generated_ids)
             ]
@@ -281,7 +743,20 @@ for scene_id, changes_list in list(data.items()):
                 generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
             )[0].strip()
          
-            qa['predicted_answer'] = output_text
+            def extract_answer(text):
+                match = re.search(r"<answer>\s*(.*?)\s*</answer>", text, re.DOTALL)
+                if match:
+                    return match.group(1).strip()
+                return text.strip()  # fallback，如果没匹配到就返回原始输出
+
+            # 在主循环里替换：
+            raw_output = processor.batch_decode(
+                generated_ids_trimmed, skip_special_tokens=True, clean_up_tokenization_spaces=False
+            )[0].strip()
+
+            predicted_answer = extract_answer(raw_output)
+            qa['predicted_answer'] = predicted_answer
+            # qa['predicted_answer'] = output_text
             
             print(f'Processed scene {scene_id}, change {i + 1}, question {j + 1}')
             
@@ -307,8 +782,9 @@ for scene_id, changes_list in list(data.items()):
 
             total_questions += 1
             total_questions_per_type[question_type] += 1 
-            
-save_json(data, f"dataset/contextvqa_{args.model_id.split('/')[1]}_no_label_align.json")
+            # print(f"Prediction: {output_text}")
+            # print(f"Reference : {answer}")
+save_json(data, f"dataset/contextvqa_Qwen2_VL_7B_no_label_align_1500_prompt_v2.json")
 
 # Calculate average metrics for each question type
 for question_type in total_questions_per_type:
